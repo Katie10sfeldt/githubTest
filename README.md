@@ -1,5 +1,5 @@
 # githubTest
-This is a test repository, intended for learning and practicing GitHub skills.
+by Katie Tensfeldt
 
-## A new edit...
-Testing uploading from local file to the master file on GitHub.
+## Description
+This is a test repository for learning to use GitHub. This is just a text document to practice the functions of Git and GitHub.
