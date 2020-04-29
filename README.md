@@ -16,4 +16,8 @@ This is a test repository for learning to use GitHub. This is just a text docume
 - In basic form, repos only have one "branch" of code called the master branch. There are other branches which can be branched from the main code. A reason for this would be to work on a new feature without altering the master code. The branches can be merged with the master branch once it is ready to be merged.
 
 ## Notes from GitHub Tutorial #4
-- 
+- To create a local repository, I need a command prompt and VS code open. 
+- I start by creating a project folder. In my case, I saved it under Documents, then a folder named "Projects", and then a folder named "RepoTest".
+- In the command prompt, I started by writing "cd documents", *enter*. Once in documents, I wrote "cd projects", *enter*. Once in projects, I wrote "cd repotest", *enter*.
+- Once in the RepoTest folder, I then wrote "git init" *enter*. This prompted command prompt to initialize a git for that particular folder. In VSCode, I opened the folder RepoTest, and at the bottom of the screen, I could see that the RepoTest was part of a master branch of a repository. 
+- Once that repository is created, I can add files to the folder, and make edits that are tracked. 
