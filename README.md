@@ -2,7 +2,7 @@
 by Katie Tensfeldt
 
 ## Description
-This is a test repository for learning to use GitHub. This is just a text document to practice the functions of Git and GitHub.
+This is a test repository. A ReadME document as I take notes on the tutorials.
 
 ## Notes from GitHub Tutorial #3
 - A Git is essentially a way to save and track files of code, or repositories. With git, I can save every version of my code, and go back to previous versions at any time. 
