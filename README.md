@@ -18,7 +18,22 @@ This is a test repository for learning to use GitHub. This is just a text docume
 ## Notes from GitHub Tutorial #4
 - To create a local repository, I need a command prompt and VS code open. 
 - I start by creating a project folder. In my case, I saved it under Documents, then a folder named "Projects", and then a folder named "RepoTest".
-- In the command prompt, I started by writing "cd documents", *enter*. Once in documents, I wrote "cd projects", *enter*. Once in projects, I wrote "cd repotest", *enter*.
-- Once in the RepoTest folder, I then wrote "git init" *enter*. This prompted command prompt to initialize a git for that particular folder. In VSCode, I opened the folder RepoTest, and at the bottom of the screen, I could see that the RepoTest was part of a master branch of a repository. 
+- In the command prompt, I started by writing `cd documents`, *enter*. Once in documents, I wrote `cd projects`, *enter*. Once in projects, I wrote `cd repotest`, *enter*.
+- Once in the RepoTest folder, I then wrote `git init` *enter*. This prompted command prompt to initialize a git for that particular folder. In VSCode, I opened the folder RepoTest, and at the bottom of the screen, I could see that the RepoTest was part of a master branch of a repository. 
 - Once that repository is created, I can add files to the folder, and make edits that are tracked. 
-- To pull up command prompt, type [` command, shift, `]
+- To pull up command prompt, type `<command, shift,`>`
+
+## Notes from GitHub Tutorial #5
+- Staging a change before committing allows us to be more streamlined about how many commits we are making - if we want to make edits, but aren't quite ready to commit (maybe there are a few more tweaks that can be made before commiting) it allows us to do that.
+- Commits should only be made at logical points, not done haphazardly
+
+- To use the command function:
+  - **Checking status before making edits** type `git status`
+    - This will show if any changes are in the staging area to be committed. 
+  - after an edit, type `git add <file>` and press *enter* then type `git status`
+    - This will add the file to the staging area. It will appear as "modified: <file>" in yellow
+    ![Sample](/documents/projects/repotest/images/sample1.png)
+  - TO remove a file from the staging area, `git restore --staged <file>` and press *enter* then type `git status`
+    - This will remove the file from the staging area. It will appear as "modified: <file>" in red
+
+- In VS CODE, it is simpler, once git is installed on the computer. By simply saving a file that is already being tracked by git, it stages it, but does not commit it yet.
