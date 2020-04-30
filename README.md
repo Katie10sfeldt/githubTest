@@ -21,4 +21,4 @@ This is a test repository for learning to use GitHub. This is just a text docume
 - In the command prompt, I started by writing "cd documents", *enter*. Once in documents, I wrote "cd projects", *enter*. Once in projects, I wrote "cd repotest", *enter*.
 - Once in the RepoTest folder, I then wrote "git init" *enter*. This prompted command prompt to initialize a git for that particular folder. In VSCode, I opened the folder RepoTest, and at the bottom of the screen, I could see that the RepoTest was part of a master branch of a repository. 
 - Once that repository is created, I can add files to the folder, and make edits that are tracked. 
-- To pull up command prompt, type `command, shift, `
+- To pull up command prompt, type [` command, shift, `]
