@@ -32,8 +32,7 @@ This is a test repository for learning to use GitHub. This is just a text docume
     - This will show if any changes are in the staging area to be committed. 
   - after an edit, type `git add <file>` and press *enter* then type `git status`
     - This will add the file to the staging area. It will appear as "modified: <file>" in yellow
-    ![Sample](C:\Users\kathl\Documents\Projects\RepoTest\images\sample1.png)
-  - TO remove a file from the staging area, `git restore --staged <file>` and press *enter* then type `git status`
+  - To remove a file from the staging area, `git restore --staged <file>` and press *enter* then type `git status`
     - This will remove the file from the staging area. It will appear as "modified: <file>" in red
 
 - In VS CODE, it is simpler, once git is installed on the computer. By simply saving a file that is already being tracked by git, it stages it, but does not commit it yet.
