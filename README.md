@@ -40,18 +40,18 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
 ## Notes from GitHub Tutorial #6
 
 - Today I learned how to commit a file. To commit via the command prompt:
-  1. Check the status of the files you want to commit: `git status **enter**`
-    1. This should pull up a list of items that you have in the staging area
-  1. Proceed to commit the files: `git add -m "<message title>" **enter**`
-    1. This will commit the files you have to the master branch. 
-    1. When typing a message title, be descriptive and specific. 
-    1. Limit the subject line to 50 characters.
-    1. Capitalize only the first letter in the subject line
-    1. Don't put a period at the end of the subject line
-    1. Put a blank line beween the subject line and the body
-    1. Wrap the body at 72 characters
-    1. Use the imperative mood
-    1. Describe what was done and why, but not how
-  1. If you want to see a list of the commit history: `git log **enter**`
-  1. If you don't want to see as long of a list of commit history: `git log --oneline **enter**`
-    1. This will show you a list of the commit history with its unique code and title.
+  * Check the status of the files you want to commit: `git status **enter**`
+    * This should pull up a list of items that you have in the staging area
+  * Proceed to commit the files: `git add -m "<message title>" **enter**`
+    * This will commit the files you have to the master branch. 
+    * When typing a message title, be descriptive and specific. 
+    * Limit the subject line to 50 characters.
+    * Capitalize only the first letter in the subject line
+    * Don't put a period at the end of the subject line
+    * Put a blank line beween the subject line and the body
+    * Wrap the body at 72 characters
+    * Use the imperative mood
+    * Describe what was done and why, but not how
+  * If you want to see a list of the commit history: `git log **enter**`
+  * If you don't want to see as long of a list of commit history: `git log --oneline **enter**`
+    * This will show you a list of the commit history with its unique code and title.
