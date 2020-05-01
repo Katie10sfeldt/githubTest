@@ -36,3 +36,22 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
     - This will remove the file from the staging area. It will appear as "modified: <file>" in red
 
 - In VS CODE, it is simpler, once git is installed on the computer. By simply saving a file that is already being tracked by git, it stages it, but does not commit it yet.
+
+## Notes from GitHub Tutorial #6
+
+- Today I learned how to commit a file. To commit via the command prompt:
+  1. Check the status of the files you want to commit: `git status **enter**`
+    1. This should pull up a list of items that you have in the staging area
+  1. Proceed to commit the files: `git add -m "<message title>" **enter**`
+    1. This will commit the files you have to the master branch. 
+    1. When typing a message title, be descriptive and specific. 
+    1. Limit the subject line to 50 characters.
+    1. Capitalize only the first letter in the subject line
+    1. Don't put a period at the end of the subject line
+    1. Put a blank line beween the subject line and the body
+    1. Wrap the body at 72 characters
+    1. Use the imperative mood
+    1. Describe what was done and why, but not how
+  1. If you want to see a list of the commit history: `git log **enter**`
+  1. If you don't want to see as long of a list of commit history: `git log --oneline **enter**`
+    1. This will show you a list of the commit history with its unique code and title.
