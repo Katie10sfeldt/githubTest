@@ -55,3 +55,37 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
   * If you want to see a list of the commit history: `git log **enter**`
   * If you don't want to see as long of a list of commit history: `git log --oneline **enter**`
     * This will show you a list of the commit history with its unique code and title.
+
+## Notes from GitHub Tutorial #7
+* There are 3 ways to "undo" a commit if there is a mistake with a commit, line of code, etc.
+  * Checkout Commit - Safest way
+  * Revert Commit - Not as safe as checkout
+  * Reset Commit - Most dangerous (could ruin repository). Must be 100% sure this is needed before using it
+* Checkout Commit - **READ ONLY**. It will not save any changes made once the commit is checked out (used to view what code looked like at a certain point in time)
+* Revert Commit - removes a particular commit. Does not affect other pieces of code or other commits, only undoes one particular commit as if it never existed.
+* Reset Commit - removes all commits back to a desired point. Ex. If you want to go back to a certain date, and remove all commits that occurred after that point in time.
+
+**Checkout Commit**
+* In order to checkout a particular commit, follow these steps:
+  * In the particular file you are working on, type `git log --oneline **enter**`
+  * Find the particular commit you want to checkout (which state you want to view the code) 
+  * Type `git commit <unique id number of desired commit> **enter**`
+  * This will pull up a *read only* of the code you wanted to view
+  * When finished viewing that particular commit, type `git checkout master **enter**` which takes you back to the main master branch
+
+**Revert Commit**
+* In order to revert a commit, follow these steps:
+  * In the particular file you are working in, type `git log --oneline **enter**` to pull up a history of commits
+  * Find the commit you want to remove
+  * Type `git revert <unique id number of desired commit> **enter**
+  * This pulls up a new box that asks you to name your new commit (the reverting of a previous commit)
+  * In VS Code, you can simply click the check box in the source control tab. This will commit your change.
+  * In the command prompt, type `git log --oneline **enter` to view your new change commit
+    * What our change did was not remove the desired commit. It created a new commit which reverted the desired commit. The previous commit still exists.
+
+**Reset Commit**
+* **warning**: When using "Reset Commit" be extremely careful! This may destroy sections of code. Make sure this is the correct command you want to use before proceding.
+* To reset a commit, follow these steps:
+  * In the command prompt, type `git reset <unique id of commit you want to reset to> **enter**`
+    *Note: If you are working on any changes that have not been staged, pressing enter will not remove those items. If you want to remove those items that you are working on, type instead `git reset <unique id of commit you want to reset to> --hard **enter**`
+    *CAUTION: Doing this will completely delete any files that were once in the master branch - there is no way to recover those commits!!
