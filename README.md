@@ -89,3 +89,17 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
   * In the command prompt, type `git reset <unique id of commit you want to reset to> **enter**`
     *Note: If you are working on any changes that have not been staged, pressing enter will not remove those items. If you want to remove those items that you are working on, type instead `git reset <unique id of commit you want to reset to> --hard **enter**`
     *CAUTION: Doing this will completely delete any files that were once in the master branch - there is no way to recover those commits!!
+
+## Notes from GitHub Tutorial #8
+* **Creating a branch** is critical for working on a new feature of code without affecting the main branch. Used to test new bits of code. Multiple branches can be created at a time to allow multiple coders to work on different features. The branches can be merged back to the master branch once the pieces of code are tested
+* To create a branch, in Command Prompt, type `git branch "desired name of branch" **enter**`
+  * This will create the new branch
+* To view all branches that exist for the particular repository, type `git branch -a **enter**`
+  * This will pull up a view of all existing branches. *NOTE*- the branch in which you are currently working will be indicated with yellow text and an asterisk next to it.
+* To switch to the desired branch, type `git checkout "name of desired branch" **enter**`
+* To verify that you have been switched to that particular branch, type `git branch -a **enter**`
+  * In VS CODE, you can see which branch you are working on in the bottom left corner with the branch icon.
+* To save work within that particular branch, type `git add .(or name of file) **enter**`
+* To commit work within a particular branch, type `git commit -m "desired name of commit" **enter**`
+* To delete a branch, type `git branch -d "name of branch" **enter**`
+  * This will only workk if a branch has been merged to the master.
