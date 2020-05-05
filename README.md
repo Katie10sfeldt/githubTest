@@ -102,4 +102,7 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
 * To save work within that particular branch, type `git add .(or name of file) **enter**`
 * To commit work within a particular branch, type `git commit -m "desired name of commit" **enter**`
 * To delete a branch, type `git branch -d "name of branch" **enter**`
-  * This will only workk if a branch has been merged to the master.
+  * This will only work if a branch has been merged to the master.
+* If a branch is not merged with the master, and you would like to delete it, type `git branch -D "name of branch" **enter**`
+
+* A quick checkout for new branches, type `git checkout -b "new name of branch" **enter**`
