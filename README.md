@@ -106,3 +106,11 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
 * If a branch is not merged with the master, and you would like to delete it, type `git branch -D "name of branch" **enter**`
 
 * A quick checkout for new branches, type `git checkout -b "new name of branch" **enter**`
+
+## Notes from GitHub Tutorial #9
+# Merging branches
+* You merge a branch back to the master once you are happy with the piece of code that was branched off.
+* To merge a branch, you must be in the branch that you want to merge to (ex. if I want to merge a branch, I must be in master).
+* To merge the branch, type `git merge "name of branch you want to merge to the master" **enter**`
+  * As long as no one has edited the master branch to be different from what you are merging, there should be no issues.
+  * If the master has been edited and is different from the branch, you must fix the edit - assist the program in merging the files - and then stage the change, and commit. NOTE: when you commit this change, a message is not needed. Simply type `git commit **enter**`
