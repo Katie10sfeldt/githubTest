@@ -114,3 +114,14 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
 * To merge the branch, type `git merge "name of branch you want to merge to the master" **enter**`
   * As long as no one has edited the master branch to be different from what you are merging, there should be no issues.
   * If the master has been edited and is different from the branch, you must fix the edit - assist the program in merging the files - and then stage the change, and commit. NOTE: when you commit this change, a message is not needed. Simply type `git commit **enter**`
+
+## Notes from GitHub Tutorial #10
+* GitHub is an online hosted (remote)repository. This means that multiple collaborators can work off the same code by cloning the code, then push up updates, and pull updates to their local computer.
+* Recommended: start a repo, then clone it to the comuter PRIOR to beginning work on it.
+* IF you already have a local repo that needs to be uploaded on github, start a new repo on GitHub.
+* Make sure the name matches your local repo
+* When you create the repo, GitHub will give you a link to the repo.
+* Copy the link, then in command prompt, type `git push <paste link> master **enter**`
+  * You would say "master" if that is the branch you want to push.
+
+* To clone a code from Github, cd to the location you want it saved, in command prompt, type `git clone <link> **enter**` then cd to that particular file.
