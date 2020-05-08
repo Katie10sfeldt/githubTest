@@ -131,6 +131,7 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
 * Using Command Prompt, I can type `git pull origin master **enter**` to refresh the master branch from GitHub. 
   * On VS Code, there is a refresh button at the bottom left of the screen where I can automatically refresh.
 * When adding a new feature, I can create a new branch with `git checkout -b "name of branch" **enter**` and work on the changes. 
+  * I can also use `git switch -c "name_of_branch" **enter**` to **C**reate a new branch 
 * When I am ready to show those changes to a team, it is important not to merge those changes yet (just in case edits need to be made before merging with the master)
   * Type `git add . **enter**` to add those changes to the staging area
   * Type `git commit -m "desired name of commit" **enter**`
