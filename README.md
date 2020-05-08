@@ -125,3 +125,18 @@ This is a test repository. A ReadME document as I take notes on the tutorials.
   * You would say "master" if that is the branch you want to push.
 
 * To clone a code from Github, cd to the location you want it saved, in command prompt, type `git clone <link> **enter**` then cd to that particular file.
+
+## Notes from GitHub Tutorial #11
+* When collaborating on a project with other programers, it is important to use the push and pull functions so that they can keep their master branches up to date. 
+* Using Command Prompt, I can type `git pull origin master **enter**` to refresh the master branch from GitHub. 
+  * On VS Code, there is a refresh button at the bottom left of the screen where I can automatically refresh.
+* When adding a new feature, I can create a new branch with `git checkout -b "name of branch" **enter**` and work on the changes. 
+  * I can also use `git switch -c "name_of_branch" **enter**` to **C**reate a new branch 
+* When I am ready to show those changes to a team, it is important not to merge those changes yet (just in case edits need to be made before merging with the master)
+  * Type `git add . **enter**` to add those changes to the staging area
+  * Type `git commit -m "desired name of commit" **enter**`
+  * Type `git push origin "name of the new branch that needs to be added" **enter**` This will add the new branch to GitHub.
+* Once your branch has been pushed to Git Hub, you can view the changes by selecting "Compare and Pull Request"
+  * Through here, we can send a request to collaboraters to review the changes, and eventually merge the changes to the master. Collaboraters can add comments, request edits and so forth prior to the branch being merged to the master.
+* As long as the new branch has no conflicts with the base branch, it can be merged to the master on Git Hub. Then the merged branch can be deleted (because it has been merged with the main and no longer needs to exist)
+* **NOTE**: Before beginning a new feature, always perform a pull request for the master to ensure your code is up to date (this could cause problems when it comes time to merge if the code is not up to date) 
