@@ -1,4 +1,4 @@
-# githubTest
+# GitHub Tutorial
 by Katie Tensfeldt
 
 ## Description
