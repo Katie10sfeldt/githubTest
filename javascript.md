@@ -13,5 +13,5 @@ Javascript is a language for web design that is used to **ENHANCE** existing htm
 - JavaScript is not, and has nothing to do with JAVA. It was only named that way because JAVA was popular at the time. It's real name is ECMAScript.
 
 ## Day 3 - Writing with JavaScript
-When writing with JavaScript, to embed it into an html, it must be placed within `<script></script> tags.
+When writing with JavaScript, to embed it into an html, it must be placed within `<script></script>` tags.
 
