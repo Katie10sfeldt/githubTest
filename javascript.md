@@ -14,4 +14,6 @@ Javascript is a language for web design that is used to **ENHANCE** existing htm
 
 ## Day 3 - Writing with JavaScript
 When writing with JavaScript, to embed it into an html, it must be placed within `<script></script>` tags.
+[See Here for Example of Script](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/javascript.html)
+
 
