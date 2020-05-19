@@ -27,3 +27,16 @@ When writing with JavaScript, it is important to remember that the code is read 
 [Here is an example of a .js file](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) which will show the difference between an external .js file versus an html file with `<script></script>` code.
 
 Both versions work the same, but using an external file can keep the code looking cleaner.
+
+## Day 5 - Google Chrome Developer Tools
+- To open developer tools on chrome, press `F12`
+- In the **elements tab**, html code will display. 
+- If there are any links to other files, I can right click and select "Open Link in Resources Panel" which will redirect me to the Resources tab.
+    - From the Resources Panel, I can view .js or .css files associated with the website
+
+- **Console Tab**- Within the console tab, I can write JavaScript live, and it will show any errors live as they come up.
+- It is used mainly to test JavaScript elements
+    - The new code written in the console tab will show you where in line on the code it is located, and if you click it, it will take you to that line of code.
+    - Basic math can be completed in the Console tab
+
+- Back in the **elements tab**, I can click the button at the top that looks like `<_`, which will display elements, Console, and style in one screen.
