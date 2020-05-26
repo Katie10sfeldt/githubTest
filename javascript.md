@@ -76,4 +76,5 @@ Both versions work the same, but using an external file can keep the code lookin
 - Once a value for a variable is created, it can be redefined by simply setting it equal to a new value or string.
 - When naming variables, it is important to have the names actually meaning something.
 
-*Javascript is a "weakly" typed language, because it does not to be incredibly specific.
+*Javascript is a "weakly" typed language, because it does not to be incredibly specific.'*
+[See here for comparison to C](https://github.com/Katie10sfeldt/notes-repo/blob/master/js-c.md)
