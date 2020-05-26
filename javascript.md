@@ -64,3 +64,16 @@ Both versions work the same, but using an external file can keep the code lookin
      `*/`
 
 - JavaScript WILL run from top top bottom- in order of how it is written and formatted.
+
+## Day 7 - JavaScript Variables
+
+- We define variables with the key word `var`
+- you then choose a name for the variable, but the name cannot start with a number. It is then ended with a semicolon: ex. `var myVariable;`
+- to then set the variable equal to something, type ex. `myVariable = 10;`
+- if setting a variable equal to a word or string, `myVariable = "hello";` it must be within quotation marks.
+- This can be done all in one line `var myVariable = "hello";`
+- if you call the variable later but just typing `myVariable` and pressing enter, it will return the definition, in this case "hello".
+- Once a value for a variable is created, it can be redefined by simply setting it equal to a new value or string.
+- When naming variables, it is important to have the names actually meaning something.
+
+*Javascript is a "weakly" typed language, because it does not to be incredibly specific.
