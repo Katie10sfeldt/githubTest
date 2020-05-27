@@ -67,6 +67,8 @@ Both versions work the same, but using an external file can keep the code lookin
 
 ## Day 7 - JavaScript Variables
 
+These following notes can be done in developer tools.
+
 - We define variables with the key word `var`
 - you then choose a name for the variable, but the name cannot start with a number. It is then ended with a semicolon: ex. `var myVariable;`
 - to then set the variable equal to something, type ex. `myVariable = 10;`
@@ -78,3 +80,39 @@ Both versions work the same, but using an external file can keep the code lookin
 
 *Javascript is a "weakly" typed language, because it does not to be incredibly specific.'*
 [See here for comparison to C](https://github.com/Katie10sfeldt/notes-repo/blob/master/js-c.md)
+
+## Day 8 - Basic Mathematical Operators
+
+In Javascript there are 5 common operators:
+
+1. Assignment operator - `var myVar = 5;`
+2. Addition
+3. Subtraction
+4. Multiplication
+5. Division
+
+# Addition
+
+Ex: `5 + 5`
+
+When the function is entered, it should return the sum.
+
+- Variables can be used as well. ex: `myVar + 10` or `myVar = myVar + 10`
+  - The second redefines the variable.
+
+- With addition, ONLY, if you were to say something like `5 + "hello"`, it would return `"5hello"`
+  - This can also combine 2 strings: ex. `"hello" + " world"` would return `"hello world"`
+
+# Subtraction
+
+See above, replacing `+` with `-`.
+
+# Multiplication
+
+Same format as above, using `*` as the action.
+
+- With regards to multiplying a number by a string, or string by a string (as seen with addition) the developer tools should return `NaN`, meaning "not a number".
+
+# Division
+
+Same format, using `/` to use division.
