@@ -91,7 +91,7 @@ In Javascript there are 5 common operators:
 4. Multiplication
 5. Division
 
-# Addition
+**Addition**
 
 Ex: `5 + 5`
 
@@ -103,16 +103,16 @@ When the function is entered, it should return the sum.
 - With addition, ONLY, if you were to say something like `5 + "hello"`, it would return `"5hello"`
   - This can also combine 2 strings: ex. `"hello" + " world"` would return `"hello world"`
 
-# Subtraction
+**Subtraction**
 
 See above, replacing `+` with `-`.
 
-# Multiplication
+**Multiplication**
 
 Same format as above, using `*` as the action.
 
 - With regards to multiplying a number by a string, or string by a string (as seen with addition) the developer tools should return `NaN`, meaning "not a number".
 
-# Division
+**Division**
 
 Same format, using `/` to use division.
