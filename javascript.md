@@ -116,3 +116,25 @@ Same format as above, using `*` as the action.
 **Division**
 
 Same format, using `/` to use division.
+
+## Day 9 - Math Operator Short-hand
+
+(Again in the developer tools)
+
+Assigning a value to a variable, there is some shorthand.
+For example, when normally we would assign a value by typing:
+`var myVar =10`
+and then if we wanted to add to it and redefine myVar:
+`myVar = myVar + 5` which would return 15.
+
+- This reassigns the value of myVar to 15
+
+For shorthand, we can simply type:
+`myVar += 5`
+This is the same as the last example above, but a shorter, quicker way to do it.
+
+- This will work with subtraction, division and multiplication.
+
+More shorthand, if we just want to add 1 over and over again, every time we input myVar:
+`myVar ++`
+This will return a number at an increase of 1 each time. This works for `myVar --` as well
