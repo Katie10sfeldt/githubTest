@@ -138,3 +138,21 @@ This is the same as the last example above, but a shorter, quicker way to do it.
 More shorthand, if we just want to add 1 over and over again, every time we input myVar:
 `myVar ++`
 This will return a number at an increase of 1 each time. This works for `myVar --` as well
+
+## Day 10 - Logging to the Console
+
+To write a variable to the document (which would be the webpage you are writing for) perform the following:
+
+1. Define your variable.
+2. Type `document.write(myVar)` whatever the myVar may stand for.
+
+- This particular method will show the value of myVar in the document.
+
+The most common way to write code is to write it to the console. To do that:
+
+1. Define the variable.
+2. Type `console.log(myVar)`
+
+- This particular method will show the value of myVar in the console.
+
+For both `document.write()` and `console.log` it can perform math functions.
