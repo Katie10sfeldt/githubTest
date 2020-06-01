@@ -156,3 +156,27 @@ The most common way to write code is to write it to the console. To do that:
 - This particular method will show the value of myVar in the console.
 
 For both `document.write()` and `console.log` it can perform math functions.
+
+## Day 11 - Booleans in JavaScript
+
+Again, this lesson is able to be accomplished in developer tools.
+
+To assign a value to a variable with a boolean expression:
+
+1. Type `var <variable name> = true`: This is not a string. Strings are surrounded by `""`. This is a boolean expression.
+2. I can reassign the value to false by typing `<variable name> = false`.
+
+To test the boolean expression, I can type into developer a comparison operator:
+
+- `7 > 5` - This will return true if the program works.
+- `7 < 5` - This will return false if the program works.
+- `7 = 5` - This will return an error. The reason is because `=` is an assignment operator. To set a number equal to something we must use `==`.
+- `7 == 5`- This wll return true.
+
+I can check the boolean value of an individual number using the Boolean key word (built in function).
+
+- `Boolean(7 > 5)` will return `true`
+- Any number will return true, even negative numbers.
+  - The only number that will return false is `0`.
+- If I input a string `Boolean("hello")` will return true, since the string contains something.
+  - If the string is empty `Boolean("")` it will return false, since there is nothing in the string.
