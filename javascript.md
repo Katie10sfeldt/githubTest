@@ -189,11 +189,11 @@ This particular lesson is written in VS Code, and viewed in developer tools.
 
 To write a portion of JavaScript:
 
-`var youLikeMeat = true;       //setting value to a variable
+`var youLikeMeat = true;`       //setting value to a variable
 
-if (youLikeMeat){
-      document.write("Here is the meaty menu...");
-}`
+`if (youLikeMeat){`
+      `document.write("Here is the meaty menu...");`
+`}`
 
 - What the above means is that youLikeMeat is true. If youlike meat is true, then the program will print "Here is the meaty menu..." but if it is false, it will not print.
 
@@ -209,16 +209,16 @@ if (myNum < 10){
 
 We do also have else statements.
 
-`var myNum = 10;
+`var myNum = 10;`
 
-if(myNum == 10)
-{
-  document.write("myNum is equal to 10");
-}
-else
-{
-  document.write("myNum is not equal to 10");
-}`
+`if(myNum == 10)`
+`{`
+ ` document.write("myNum is equal to 10");`
+`}`
+`else`
+`{`
+  `document.write("myNum is not equal to 10");`
+`}`
 
 - In this particular instance, the document will print "myNum is equal to 10" but if we change the value of myNum, it will change the output, due to the else statement.
 
