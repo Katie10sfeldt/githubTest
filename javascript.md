@@ -180,3 +180,46 @@ I can check the boolean value of an individual number using the Boolean key word
   - The only number that will return false is `0`.
 - If I input a string `Boolean("hello")` will return true, since the string contains something.
   - If the string is empty `Boolean("")` it will return false, since there is nothing in the string.
+
+## Day 12 - If Statements
+
+We use if statements to check if certain conditions are met. For example in a photo gallery "if you click on an image, then the image will be expanded" or "if you click the 'x' on the image, then the image will close".
+
+This particular lesson is written in VS Code, and viewed in developer tools.
+
+To write a portion of JavaScript:
+
+var youLikeMeat = true;       //setting value to a variable
+
+if (youLikeMeat){
+      document.write("Here is the meaty menu...");
+}
+
+- What the above means is that youLikeMeat is true. If youlike meat is true, then the program will print "Here is the meaty menu..." but if it is false, it will not print.
+
+This can be done with math functions, for example:
+
+var myNum = 10;
+
+if (myNum < 10){
+  document.write("myNum is less than 10");
+}
+
+- Something like the above would not print out, since it is false.
+
+We do also have else statements.
+
+var myNum = 10;
+
+if(myNum == 10)
+{
+  document.write("myNum is equal to 10");
+}
+else
+{
+  document.write("myNum is not equal to 10");
+}
+
+- In this particular instance, the document will print "myNum is equal to 10" but if we change the value of myNum, it will change the output, due to the else statement.
+
+Else statements can be written with words, like the above "youLikeMeat".
