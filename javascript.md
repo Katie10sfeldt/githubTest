@@ -228,4 +228,6 @@ Else statements can be written with words, like the above "youLikeMeat".
 
 This lesson is written in VS code, and viewed on the browser.
 
-Else statements tag along on the back of if statements. 
+Else statements tag along on the back of if statements.
+
+[Click here to see a visual representation](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) of an if else structure with accompanying notes.
