@@ -237,12 +237,12 @@ Else statements tag along on the back of if statements.
 Comparison operators is an operator that compares two things, variables and a number, or variables and a string. 
 For example:
 
-`< less than operator compares two numbers`
-`> greater than operator compares two numbers`
-`== checks if a variable and number are equal to each other`
-`!= check if a variable and number are not equal to each other`
-`=== checks if the types of a variable's value and number are the same`
-`!== checks if the type of a variable's value and number are not the same`
+- `< less than operator compares two numbers`
+- `> greater than operator compares two numbers`
+- `== checks if a variable and number are equal to each other`
+- `!= check if a variable and number are not equal to each other`
+- `=== checks if the types of a variable's value and number are the same`
+- `!== checks if the type of a variable's value and number are not the same`
 
 - What this means is if I assign a value to a variable as a string instead of a number, and compare that variable to a number, it will return false, as the types are not the same.
   - For example if `var x = "5"` and I use the comparison operator `x === 5` the return will be false, since a string is not the same as an integer.
