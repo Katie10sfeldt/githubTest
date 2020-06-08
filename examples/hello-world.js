@@ -39,3 +39,29 @@ else{
 }
 
 //the lone else in this case shows that any other value that does not match the first 3 qualifiers, will result in the output "you are not over 10!".
+
+//Logical Operators
+  //&&, 'and'
+
+var myAge = 25;
+
+if (myAge >= 18 && myAge <= 30) //the variable's value must be both over 18 and less than 30
+{
+  document.write("You can come!"); //In this case, the age is 25, which means they can come.
+}
+else //If the value of myAge were 18 or younger or 30 and over, the program would print "You can't come!"
+{
+  document.write("You can't come!");
+}
+
+  //||, 'or'
+
+var myAge = 35;
+
+if (myAge < 18 || myAge > 30)
+{
+  document.write("You can't come!");
+}
+else{
+  document.write("You can come!");
+}
