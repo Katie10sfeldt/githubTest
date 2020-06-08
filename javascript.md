@@ -247,7 +247,7 @@ For example:
 - What this means is if I assign a value to a variable as a string instead of a number, and compare that variable to a number, it will return false, as the types are not the same.
   - For example if `var x = "5"` and I use the comparison operator `x === 5` the return will be false, since a string is not the same as an integer.
 
-## Day 14 - Logical Operators
+## Day 15 - Logical Operators
 
 Used to check if multiple conditions are true.
 
