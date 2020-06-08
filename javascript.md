@@ -234,7 +234,7 @@ Else statements tag along on the back of if statements.
 
 ## Day 14 - Comparison Operators
 
-Comparison operators is an operator that compares two things, variables and a number, or variables and a string. 
+Comparison operators is an operator that compares two things, variables and a number, or variables and a string.
 For example:
 
 - `< less than operator compares two numbers`
@@ -246,3 +246,12 @@ For example:
 
 - What this means is if I assign a value to a variable as a string instead of a number, and compare that variable to a number, it will return false, as the types are not the same.
   - For example if `var x = "5"` and I use the comparison operator `x === 5` the return will be false, since a string is not the same as an integer.
+
+## Day 14 - Logical Operators
+
+Used to check if multiple conditions are true.
+
+- `&&` stands for and. A variable must meet both conditions. [See here line 43](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) for an example.
+- `||` stands for or. A variable must be true in either of the two conditions. [See here line](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) for an example.
+
+For either of the logical operators, you can have more than two conditions. You can have as many as you would like.
