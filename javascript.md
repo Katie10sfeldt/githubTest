@@ -252,6 +252,6 @@ For example:
 Used to check if multiple conditions are true.
 
 - `&&` stands for and. A variable must meet both conditions. [See here line 43](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) for an example.
-- `||` stands for or. A variable must be true in either of the two conditions. [See here line](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) for an example.
+- `||` stands for or. A variable must be true in either of the two conditions. [See here line 57](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) for an example.
 
 For either of the logical operators, you can have more than two conditions. You can have as many as you would like.
