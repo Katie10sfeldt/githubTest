@@ -65,3 +65,23 @@ if (myAge < 18 || myAge > 30)
 else{
   document.write("You can come!");
 }
+
+// WHILE LOOPS
+
+var age = 5;
+
+while (age < 10)
+{
+  console.log("Your age is less than 10");
+}//This particular case does nothing to ever stop the loop. The variable will always be equal to 5, and therefore will continuously return this response.
+document.write("You are now over 10!");//Running an infinite loop on a browser can crash the page, so be careful!
+
+//Instead, try:
+var age = 5;
+
+while (age < 10)
+{
+  console.log("Your age is less than 10");
+  age++//This tells the system that every time the code loops, add 1 to the variable. Eventually the program will stop when it reaches a value of 10.
+}
+document.write("You are now over 10!");

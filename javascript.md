@@ -255,3 +255,12 @@ Used to check if multiple conditions are true.
 - `||` stands for or. A variable must be true in either of the two conditions. [See here line 57](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) for an example.
 
 For either of the logical operators, you can have more than two conditions. You can have as many as you would like.
+
+## Day 16 - While Loops
+
+While loops work depending on a condition.
+
+While is set up in a similar way to if and else.
+
+- When creating a while loop, we have to be careful not to create an infinite loop, otherwise, the browser will crash. See hello-world.js line 69 for an example [Click here](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js)
+- Instead, create a condition that changes the variable within the loop, so that the loop does not continue running forever. (Also an example in the .js file).
