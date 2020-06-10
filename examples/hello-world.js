@@ -85,3 +85,14 @@ while (age < 10)
   age++//This tells the system that every time the code loops, add 1 to the variable. Eventually the program will stop when it reaches a value of 10.
 }
 document.write("You are now over 10!");
+
+//FOR LOOPS
+
+//the following does the same thing as the while loop above:
+
+for (age = 5; age < 10; age++) //This can also be written with age replaced with i or some other variable.
+{
+  console.log("Your age is less than 10");
+}
+document.write("You are now over 10");
+

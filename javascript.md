@@ -264,3 +264,11 @@ While is set up in a similar way to if and else.
 
 - When creating a while loop, we have to be careful not to create an infinite loop, otherwise, the browser will crash. See hello-world.js line 69 for an example [Click here](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js)
 - Instead, create a condition that changes the variable within the loop, so that the loop does not continue running forever. (Also an example in the .js file).
+
+## Day 17 - For Loops
+
+While loops contain 3 components: the Index Variable (the initial variable), the Condition (while something is true), and the Incrementer.
+
+The variable that increases each time the code loops is called the Index Variable.
+
+For loops break down the 3 components that are in the while loop in to a much simpler format. [See here line 89 for an example](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) 
