@@ -271,4 +271,12 @@ While loops contain 3 components: the Index Variable (the initial variable), the
 
 The variable that increases each time the code loops is called the Index Variable.
 
-For loops break down the 3 components that are in the while loop in to a much simpler format. [See here line 89 for an example](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) 
+For loops break down the 3 components that are in the while loop in to a much simpler format. [See here line 89 for an example](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js)
+
+## Day 18 - Break and Continue
+
+Breaks are used to 'break out' of a loop. This is done by checking a certain condition before a loop would normally stop to break the loop.
+
+Continue is similar to break, but it doesn't completely break out of the loop, it only stops the loop for a particular instance, and then continues after.
+
+[See examples of each in line 99](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) hello-world.js.

@@ -96,3 +96,34 @@ for (age = 5; age < 10; age++) //This can also be written with age replaced with
 }
 document.write("You are now over 10");
 
+//BREAKS AND CONTINUE
+
+//----Break
+
+for (i = 0; i < 10; i++)
+{
+  console.log(i);
+  
+  if(i === 7) // This particular bit of code starts a counting loop from 0. 
+  {
+    break; // When the loop reaches 7, it will break out...
+  }
+}
+console.log("I have broken out of the loop"); //And jump to here and return this phrase.
+
+//----Continue
+
+for (i = 0; i < 10; i++)
+{
+  if (i === 5 || i === 3) // In this instance, continue is a weak break.
+  {
+    continue; // When the count reaches 3 and 5, it basically skips them and continues the loop around them. 
+  }
+  console.log(i);
+
+  if(i === 7)
+  {
+    break;
+  }
+}
+console.log("I have broken out of the loop");
