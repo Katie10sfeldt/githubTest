@@ -283,4 +283,4 @@ Continue is similar to break, but it doesn't completely break out of the loop, i
 
 ## Day 19 - Practical Example Using Loops
 
-[See examples in loops.js]() of practical examples for loops.
+[See examples in loops.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/loops.js) of practical examples for loops.
