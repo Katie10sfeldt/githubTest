@@ -280,3 +280,7 @@ Breaks are used to 'break out' of a loop. This is done by checking a certain con
 Continue is similar to break, but it doesn't completely break out of the loop, it only stops the loop for a particular instance, and then continues after.
 
 [See examples of each in line 99](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/hello-world.js) hello-world.js.
+
+## Day 19 - Practical Example Using Loops
+
+[See examples in loops.js]() of practical examples for loops.
