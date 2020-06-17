@@ -289,6 +289,6 @@ Continue is similar to break, but it doesn't completely break out of the loop, i
 
 Functions group logical sections of code together so that you can "call" that function when needed.
 
-[See functions.js for samples.]()
+[See functions.js for samples.](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/functions.js)
 
 - Functions cannot start with a number!
