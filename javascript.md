@@ -284,3 +284,11 @@ Continue is similar to break, but it doesn't completely break out of the loop, i
 ## Day 19 - Practical Example Using Loops
 
 [See examples in loops.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/loops.js) of practical examples for loops.
+
+## Day 20 - Functions
+
+Functions group logical sections of code together so that you can "call" that function when needed.
+
+[See functions.js for samples.]()
+
+- Functions cannot start with a number!
