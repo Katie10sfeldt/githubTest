@@ -302,3 +302,5 @@ Global: declared outside of any function (at the top of a JavaScript file). This
 Local: declared within an individual function. It can only be used within the function. 
 
 [See examples of each in the functions.js file.](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/functions.js)
+
+NOTE**Global variables are to be avoided if at all possible. They make things easier early on, but as the code grows, they increase complexity and but potential significantly!
