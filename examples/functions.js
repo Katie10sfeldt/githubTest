@@ -43,3 +43,28 @@ function alert (/*some code*/)
 {
     //some code
 }
+
+// Lesson 21 - variable scope
+
+function getAverage (a,b)
+{
+    var average = (a + b) / 2; //Local variable
+    console.log(average);
+    return average;
+}
+
+var myResult = getAverage(7,11); //Global variiable
+console.log("The average is " + myResult);
+
+//If we were to attempt to call average outside the function, for example:
+console.log(average); //we will get an error.
+
+//Likewise, if we were to call the global variable later:
+
+function logResult()
+{
+    console.log("the average is " + myResult); 
+}
+
+logResult();
+//This will not return an error, since the variable was called outside of a function.

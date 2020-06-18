@@ -292,3 +292,13 @@ Functions group logical sections of code together so that you can "call" that fu
 [See functions.js for samples.](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/functions.js)
 
 - Functions cannot start with a number!
+
+## Day 21 - Variable Scope
+
+Two types of scope: Local and Global
+
+Global: declared outside of any function (at the top of a JavaScript file). This means it can be used anywhere in the code.
+
+Local: declared within an individual function. It can only be used within the function. 
+
+[See examples of each in the functions.js file.](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/functions.js)
