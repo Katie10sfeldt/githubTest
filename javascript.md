@@ -299,8 +299,19 @@ Two types of scope: Local and Global
 
 Global: declared outside of any function (at the top of a JavaScript file). This means it can be used anywhere in the code.
 
-Local: declared within an individual function. It can only be used within the function. 
+Local: declared within an individual function. It can only be used within the function.
 
 [See examples of each in the functions.js file.](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/functions.js)
 
-NOTE**Global variables are to be avoided if at all possible. They make things easier early on, but as the code grows, they increase complexity and but potential significantly!
+NOTE**Global variables are to be avoided if at all possible. They make things easier early on, but as the code grows, they increase complexity and but potential significantly
+
+## Day 22 - Numbers
+
+In other languages, when setting a variable equal to a number, we must specify the type of number. In JavaScript, there is no need to do that. You simply write what number you need.
+
+No numbers should be surrounded by "", because it will turn the number into a string, as opposed to a number.
+
+- Like in previous videos, we have seen comparing variables to string numbers. 
+- [See numbers.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/numbers.js) for samples of math functions.
+
+[See here](https://www.w3schools.com/jsref/jsref_obj_math.asp) for more examples of math functions.
