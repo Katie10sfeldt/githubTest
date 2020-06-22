@@ -324,4 +324,4 @@ However, if we were to try and multiply a number by "apple" the program will ret
 
 This is useful if we are trying to determine if some input is a number when it should be.
 
-See an application of this in [nan.js]((https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/nan.js)
+See an application of this in [nan.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/nan.js)
