@@ -311,7 +311,17 @@ In other languages, when setting a variable equal to a number, we must specify t
 
 No numbers should be surrounded by "", because it will turn the number into a string, as opposed to a number.
 
-- Like in previous videos, we have seen comparing variables to string numbers. 
+- Like in previous videos, we have seen comparing variables to string numbers.
 - [See numbers.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/numbers.js) for samples of math functions.
 
 [See here](https://www.w3schools.com/jsref/jsref_obj_math.asp) for more examples of math functions.
+
+## Day 23 - NaN (Not a Number)
+
+In relation to the previous lesson, if we try to multiply a number inside "" by a number, it will return a numerical value, only because JavaScript is trying to be helpful.
+
+However, if we were to try and multiply a number by "apple" the program will return "NaN" meaning not a number.
+
+This is useful if we are trying to determine if some input is a number when it should be.
+
+See an application of this in [nan.js]((https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/nan.js)
