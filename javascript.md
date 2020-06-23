@@ -325,3 +325,22 @@ However, if we were to try and multiply a number by "apple" the program will ret
 This is useful if we are trying to determine if some input is a number when it should be.
 
 See an application of this in [nan.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/nan.js)
+
+## Day 24 - Strings
+
+Strings are initialized by placing them in quotes. It usually contains more than one word, but can consist of just one word.
+
+Syntax:
+
+- Normal string:
+  - `I am a fun string`
+- If I want it to contain quotation marks within the string:
+  - `'I am a "fun" string';`
+  - NOTE: If I were to type `"I am a "fun" string"` the string would be cancelled out when it reached the "fun".
+- If I want a string to contain an apostrophe:
+  - `'I\'m a "fun" string';`
+  - NOTE: If I were to type `'I'm a "fun" string';` the string would be cancelled out when it reached 'm
+
+Properties:
+
+- See [string.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/string.js) for examples of properties
