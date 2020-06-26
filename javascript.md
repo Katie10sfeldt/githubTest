@@ -344,3 +344,9 @@ Syntax:
 Properties:
 
 - See [string.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/string.js) for examples of properties
+
+## Day 25 - Slice and Split Strings
+
+See [string.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/string.js) for notes and examples on slice and split.
+
+See [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) for more info on strings.
