@@ -350,3 +350,13 @@ Properties:
 See [string.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/string.js) for notes and examples on slice and split.
 
 See [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) for more info on strings.
+
+## Day 26 - Arrays
+
+An array is multiple values stored within a single vairable.
+
+Arrays are defined with `[]`
+
+Unlike in C, but similarly to Python, arrays in Javascript can hold values of different types (numbers, bools and strings).
+
+See [array.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/array.js) for examples.
