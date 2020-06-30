@@ -12,11 +12,11 @@ myArray[3] = "hello"    //The 3 position is set equal to "hello" (string)
 
 myArray[2] = false
 
-//Here is the shorthand way to right the above:
+//Here is the shorthand way to write the above:
 
 var myArray2 = [10, 20, "hi", false];
 
-//Another way to right it:
+//Another way to write it:
 
 var myArray3 = new Array(5) //What this does is creates a new array called myArray3 with 5 places.
 
