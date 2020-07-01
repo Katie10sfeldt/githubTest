@@ -359,4 +359,18 @@ Arrays are defined with `[]`
 
 Unlike in C, but similarly to Python, arrays in Javascript can hold values of different types (numbers, bools and strings).
 
-See [array.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/array.js) for examples.
+See [array.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/array.js) for examples
+
+## Day 27 - Intro to Objects
+
+Objects: Strings, numbers, arrays, plus many more! <--These are all objects!>
+
+Methods: End with () - These are functions that are run on a variable's value
+
+- In strings, we can make all letters uppercase or lowercase
+- In arrays, they can be sorted
+- Numbers can have mathematical functions run on them
+
+Properties: Do not end with (). These only extract information from the object.
+
+- Properties can determine length of an object, or other such features.
