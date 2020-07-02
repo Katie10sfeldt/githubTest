@@ -374,3 +374,7 @@ Methods: End with () - These are functions that are run on a variable's value
 Properties: Do not end with (). These only extract information from the object.
 
 - Properties can determine length of an object, or other such features.
+
+## Day 28 -  Creating a New Object
+
+See [objects.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/objects.js) for examples on creating new objects
