@@ -378,3 +378,7 @@ Properties: Do not end with (). These only extract information from the object.
 ## Day 28 -  Creating a New Object
 
 See [objects.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/objects.js) for examples on creating new objects
+
+## Day 29 - THIS Keyword
+
+See more notes continueing in the [objects.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/objects.js) file.

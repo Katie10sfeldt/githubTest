@@ -16,7 +16,7 @@ console.log(myCar.driver);   //If we were to log this to the console, it would o
 //For the method in the above example, there are two semicolons towards the end. This is because the first is ending the `console.log` statement
 //The second is ending the assignment operator.
 
-myCar.drive();              //This is how the method (function is called)
+myCar.drive();              //This is how the method (function) is called
 //The parenthesis is used here because we are calling the method. It was not used above, because this method did not exist yet.
 
 
@@ -45,3 +45,48 @@ var myCar2 = {
 console.log(myCar2.maxSpeed);           //This will print the car's top speed
 myCar.drive(50, 3);                     //This will print the speed the car was going in mph, times the length of time it took to get there in hours
                                         //The output will be 150
+
+
+
+
+
+
+
+
+//----------------- THIS is a keyword that is owned by the object it is nested within. ------------------
+
+var myCar2 = {
+    maxSpeed: 70, 
+    driver: "Mike", 
+    drive: function(speed, time){      
+        console.log(speed * time);
+    },
+    test: function(){
+        console.log(this);  //In this case, THIS is owned by the object myCar2
+    }
+
+};
+      
+myCar2.test();   //When we call the function here, it will log the object to the console
+console.log(myCar2.maxSpeed);        
+myCar.drive(50, 3);   
+
+
+var myCar3 = {
+    maxSpeed: 70, 
+    driver: "Shaun", 
+    drive: function(speed, time){      
+        console.log(speed * time);
+    },
+    test: function(){
+        console.log(this);  //In this case, THIS is owned by the object myCar2
+    }
+
+};
+
+myCar2.test();   //When we call the function here, it will log the object to the console
+myCar3.test();   //This will log the second object as well.  
+console.log(myCar2.maxSpeed);        
+myCar.drive(50, 3); 
+
+//THIS can be used in place of a method. It is essentially a placeholder for the object name it is owned by.
