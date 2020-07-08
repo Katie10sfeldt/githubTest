@@ -90,3 +90,37 @@ console.log(myCar2.maxSpeed);
 myCar.drive(50, 3); 
 
 //THIS can be used in place of a method. It is essentially a placeholder for the object name it is owned by.
+
+
+//------------------------------------Constructor Functions
+
+
+var Car = function(maxSpeed, driver) {    //generally start with a capital letter
+    
+    this.maxSpeed = maxSpeed;
+    this.driver = driver;
+    this.drive = function(speed, time){
+        console.log(speed * time);
+    };
+    this.logDriver = function() {
+        console.log("driver name is " + this.driver);
+    };
+
+};
+
+//Here we are creating new car objects
+
+var myCar = new Car(70, "Ninja Man");
+var myCar2 = new Car(40, "Humphrey");
+var myCar3 = new Car(10, "Shaun");
+var myCar4 = new Car(90, "James Bond");
+
+//if we were to log the following to the console:
+
+myCar.drive(30,5);
+myCar3.logDriver();
+
+//The output would be:
+
+//150
+//driver name is Shaun

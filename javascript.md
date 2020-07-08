@@ -382,3 +382,9 @@ See [objects.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/example
 ## Day 29 - THIS Keyword
 
 See more notes continueing in the [objects.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/objects.js) file.
+
+## Day 30 - Constructor Functions
+
+Constructor functions create objects for us.
+
+See [objects.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/objects.js) for examples on constructor functions.
