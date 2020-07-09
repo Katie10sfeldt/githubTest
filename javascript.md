@@ -388,3 +388,7 @@ See more notes continueing in the [objects.js](https://github.com/Katie10sfeldt/
 Constructor functions create objects for us.
 
 See [objects.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/objects.js) for examples on constructor functions.
+
+## Day 31 - The Date Object
+
+See [date.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/date.js) for examples on the Date Object.
