@@ -392,3 +392,32 @@ See [objects.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/example
 ## Day 31 - The Date Object
 
 See [date.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/date.js) for examples on the Date Object.
+
+## Day 32 - What is the DOM in JavaScript
+
+The DOM is an "application programming interface"
+Use the DOM when we interact with web pages
+
+- Add content to an HTML document
+- Delete content from an HTML document
+- Change content on an HTML document
+
+1. Document: the (HTML) web page, whether just the code in the text editor or it loaded on a browser
+2. Every HTML element in the document is an object in the eyes of DOM
+
+- `<head></head>` is an object
+- `<body></body>` is an object
+- `<ul></ul>` is an object
+- `<p></p>` is an object
+  
+3. The Model - objects in HTML are laid out in a tree element. Each nested element is a branch
+
+NODES: anything we can change in an HTML document. Each object is a note. The tags are nodes, but the text within tags are nodes. Classes, styles and other attributes are also nodes.
+
+What can be done with a DOM?
+
+- Change the `<h1>` text node at the top of the page
+- Change the backgorund color of an element node
+- Animate the logo node from left to right
+- Expand the height of an element node when you click on it
+- SO MUCH MORE!
