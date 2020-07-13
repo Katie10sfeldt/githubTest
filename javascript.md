@@ -421,3 +421,7 @@ What can be done with a DOM?
 - Animate the logo node from left to right
 - Expand the height of an element node when you click on it
 - SO MUCH MORE!
+
+## Day 33 - Traversing the DOM
+
+See notes for traversing the DOM and the get element in [dom.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/dom.js)
