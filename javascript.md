@@ -424,4 +424,6 @@ What can be done with a DOM?
 
 ## Day 33 - Traversing the DOM
 
-See notes for traversing the DOM and the get element in [dom.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/dom.js)
+See notes for traversing the DOM and the get element in [dom.js](https://github.com/Katie10sfeldt/notes-repo/blob/master/examples/dom.js).
+
+## Day 34 -
