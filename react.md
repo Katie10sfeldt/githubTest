@@ -64,7 +64,7 @@ Using this example:
 </script>`
 
 - The first argument of `render()` method defines what you want to render while the second defines where you want it rendered.
-  - In simple language, render with render the `<h1>` element in the `<div>` with the ID `"root"`.
+  - In simple language, render will render the `<h1>` element in the `<div>` with the ID `"root"`.
 - When the browser is loaded, it should show the H1 element.
 
 ## Using Create React App CLI
