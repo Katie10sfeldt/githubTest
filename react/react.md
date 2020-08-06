@@ -33,10 +33,10 @@ Virtual DOM
 - Within the body, create a `<div></div>` with an `id="root"` (just as an example of where the application will live)
 - In the body, create a script element where the React code is written:
 
-`<script type="text/babel">
-    const element = <h1>Hello from React </h1>;
-    console.log(element);
-</script>`
+`<script type="text/babel">`
+    `const element = <h1>Hello from React </h1>;`
+    `console.log(element);`
+`</script>`
 
 - When writing type, including babel is important for it to work.
 - The line above `const element = <h1>Hello from React</h1>;` may look like HTMl, but in this instance, it is actually JSX
@@ -58,10 +58,10 @@ Notes:
 
 Using this example:
 
-`<script type="text/babel">
-    const element = <h1>Hello from React </h1>;
-    ReactDOM.render(element, document.getElementById("root"));
-</script>`
+`<script type="text/babel">`
+    `const element = <h1>Hello from React </h1>;`
+    `ReactDOM.render(element, document.getElementById("root"));`
+`</script>`
 
 - The first argument of `render()` method defines what you want to render while the second defines where you want it rendered.
   - In simple language, render will render the `<h1>` element in the `<div>` with the ID `"root"`.
