@@ -7,3 +7,4 @@ This is a repo containing notes for various coding tutorials
 3. [Comparing JavaScript to C](https://github.com/Katie10sfeldt/notes-repo/blob/master/js-c.md)
 4. [React Tutorial Notes](https://github.com/Katie10sfeldt/notes-repo/tree/master/react)
 5. [Netlify tutorial notes](https://github.com/Katie10sfeldt/notes-repo/tree/master/netlify.md)
+6. [Oauth notes](https://github.com/Katie10sfeldt/notes-repo/tree/master/Oauth.md)
