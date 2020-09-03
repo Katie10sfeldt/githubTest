@@ -8,3 +8,4 @@ This is a repo containing notes for various coding tutorials
 4. [React Tutorial Notes](https://github.com/Katie10sfeldt/notes-repo/tree/master/react)
 5. [Netlify tutorial notes](https://github.com/Katie10sfeldt/notes-repo/tree/master/netlify.md)
 6. [Oauth notes](https://github.com/Katie10sfeldt/notes-repo/tree/master/Oauth.md)
+7. [Apollo GraphQL tutorial](https://github.com/Katie10sfeldt/notes-repo/tree/master/apollo.md)
