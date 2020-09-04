@@ -340,3 +340,302 @@ server.listen().then(({ url }) => {
 - The database is passed to the `UserAPI` constructor
 
 **NOTE** if `this.context` is used in a datasource, it is IMPORTANT to create a *new* instance in the `dataSources` function rather than sharing a single instance. If not, `initialize` might be called during every execution of the code for a particular user, replacing `this.context` with the context of another user
+
+## 3. Write query resolvers
+
+**Resolver** - a function that is responsible for populating the data for a single field in your schema (whenever a client queries for a particular field, the resolver for that particular field fetches the requested data from the appropriate data source)
+
+A resolver will return one of two things:
+
+- Data of the type required by the corresponding schema field (string, integer, object, etc)
+- A promise that fulfills with data of the required type
+
+### The resolver function signature
+
+Resolver functions can accept 4 positional arguments
+
+1. `parent` - The return value of the resolver for this field's parent (the resolver for a parent field always executes *before* the resolvers for that field's children)
+2. `args` - Contains all GraphQL arguments provided for this field
+3. `context` - Shared across all resolvers that execute for a particular operation. Used to share per-operation state, such as authentication, information and access to data sources
+4. `info` - **Only in advanced cases** - contains information about the execution state of the operation
+
+In most cases, `context` is used - it allows resolvers to share instances of our data sources
+
+### Define top-level resolvers
+
+Begin by defining resolvers for top-level fields (since the parent field will always execute before that field's children)
+
+`Query` type
+
+In our example, `Query` type defines 3 fields. Define resolvers in their own `.js` file:
+
+```javascript
+module.exports = {
+  Query: {
+    launches: (_, __, { dataSources }) =>
+      dataSources.launchAPI.getAllLaunches(),
+    launch: (_, { id }, { dataSources }) =>
+      dataSources.launchAPI.getLaunchById({ launchId: id }),
+    me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser()
+  }
+};
+```
+
+- Above, we define our resolvers in a map, where the map's keys correspond to our schema's types (`Query`) and fields (`launches`, `launch`, `me`)
+- All three resolver functions assign their first positional argument (`parent`) to the variable `_` as a convention to indicate that they don't use its value
+- The `launches` and `me` functions assign their second positional argument (`args`) to `_ _` for the same reason
+- All 3 resolver functions use the third positional argument (`context`) - They destructure it to access the `dataSources` defined
+- None of the resolver functions inlcludes the fourth positional argument (`info`) because they don't use it, and there's no need to include it
+
+**BEST PRACTICE** - keep resolvers short. They rely on the data from our API data sources, so there's no need to make them lengthy
+
+### Add resolvers to Apollo Server
+
+Adding resolvers to Apollo Server is simple. Only 2 lines of code are needed to be added to the `index.js` file. It should look like this:
+
+```javascript
+const { ApolloServer } = require('apollo-server');
+const typeDefs = require('./schema');
+const { createStore } = require('./utils');
+const resolvers = require('./resolvers');
+
+const LaunchAPI = require('./datasources/launch');
+const UserAPI = require('./datasources/user');
+
+const store = createStore();
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  dataSources: () => ({
+    launchAPI: new LaunchAPI(),
+    userAPI: new UserAPI({ store })
+  })
+});
+```
+
+### Run test queries
+
+To run a test query:
+
+1. Run `npm start` in the command line
+2. Open `localhost:4000` in the browser
+3. Use the query below in the left field of the GraphQL Playground
+4. Click play
+
+```sdl
+query GetLaunches {
+  launches {
+    id
+    mission {
+      name
+    }
+  }
+}
+```
+
+- On the right side of the playground screen, a list of mission ids and names will appear.
+- To test a query that takes an argument, use the following query:
+
+```sdl
+query GetLaunchById {
+  launch(id: 60) {
+    id
+    rocket {
+      id
+      type
+    }
+  }
+}
+```
+
+- The above will return the data for the launch with the id of 60.
+
+- Instead of hard coding arguments in to the query, we can use variables instead:
+
+```sdl
+query GetLaunchById($id: ID!) {
+  launch(id: $id) {
+    id
+    rocket {
+      id
+      type
+    }
+  }
+}
+```
+
+- Then in the query variables section on the bottom of the screen, we can define our variables:
+
+```sdl
+{
+  "id": 60
+}
+```
+
+### Define other resolvers
+
+In the test queries above, some were run that haven't had resolvers written for them yet. Without resolvers, Apollo defines a default resolver for any field we don't define a custom resolver for to ensure the tests will still run successfully.
+
+It does so using this logic:
+
+```javascript
+if ('the parent argument has a property with the resolvers exact name'){
+    if('that propertys value is a function') {
+        call the function and return its return value;
+    }
+    else {
+        return propertys value;
+    }
+}
+else {
+    return undefined;
+}
+```
+
+In most cases, the default resolver will do exactly what is needed.
+
+In our example, the `Mission.missionPatch` schema needs a custom resolver. It currently looks like this:
+
+```sdl
+type Mission {
+  # Other field definitions...
+  missionPatch(size: PatchSize): String
+}
+```
+
+The resolver for this schema should return a different value based on whether the query specifies `LARGE` or `SMALL`
+
+The resolver should look like this:
+
+```javascript
+// Query: {
+//   ...
+// },
+
+Mission: {
+  // The default size is 'LARGE' if not provided
+  missionPatch: (mission, { size } = { size: 'LARGE' }) => {
+    return size === 'SMALL'
+      ? mission.missionPatchSmall
+      : mission.missionPatchLarge;
+  },
+},
+```
+
+- Above, the resolver obtains a large or small patch from `mission` which is the object returned by the default resolver for the *parent* field in the schema `Launch.mission`
+- We can now add resolvers for our other schema, `Launch` and `User`:
+
+```javascript
+// Mission: {
+//   ...
+// },
+
+Launch: {
+  isBooked: async (launch, _, { dataSources }) =>
+    dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id }),
+},
+User: {
+  trips: async (_, __, { dataSources }) => {
+    // get ids of launches by user
+    const launchIds = await dataSources.userAPI.getLaunchIdsByUser();
+    if (!launchIds.length) return [];
+    // look up those launches by their ids
+    return (
+      dataSources.launchAPI.getLaunchesByIds({
+        launchIds,
+      }) || []
+    );
+  },
+},
+```
+
+**NOTE** - the server does not currently kow the identity of the current user when calling functions like `getLaunchIDsByUser`.
+
+### Paginate results
+
+Pagination ensures that our server sends data in small chunks, rather than returning more data than a client needs, and slowing down the process
+
+*Cursor based pagination* is recommended for numbered pages because it eliminates the possibility of skipping and item or displaying the same item more than once
+  
+- With this system, a constant pointer or cursor is used to keep track of where to start in the data set when fetching the next set of results
+
+In `schema.js` the code should look like this:
+
+```javascript
+type Query {
+  launches(
+    pageSize: Int
+    after: String
+  ): LaunchConnection!
+  launch(id: ID!): Launch
+  me: User
+}
+
+type LaunchConnection {
+  cursor: String!
+  hasMore: Boolean!
+  launches: [Launch]!
+}
+```
+
+- Above, `Query.launches` now takes two parameters(`pageSize`, and `after`) and returns a `LaunchConnection` object
+  - `LaunchConnection` includes:
+    - A list of `launches` (the actual data requested by the query)
+    - A `cursor` that idicates the current position in the data set
+    - A `hasMore` boolean that indicates whether the data set contains any more items beyond those included in `launches`
+
+In a file named `utils.js` that is downloaded from the tutorial, `paginateResults` is defined for us to import in to our `resolvers.js`
+
+`resolvers.js` should now look like this:
+
+```javascript
+const { paginateResults } = require('./utils');
+
+module.exports = {
+  Query: {
+
+    launches: async (_, { pageSize = 20, after }, { dataSources }) => {
+      const allLaunches = await dataSources.launchAPI.getAllLaunches();
+      // we want these in reverse chronological order
+      allLaunches.reverse();
+      const launches = paginateResults({
+        after,
+        pageSize,
+        results: allLaunches
+      });
+      return {
+        launches,
+        cursor: launches.length ? launches[launches.length - 1].cursor : null,
+        // if the cursor at the end of the paginated results is the same as the
+        // last item in _all_ results, then there are no more results after this
+        hasMore: launches.length
+          ? launches[launches.length - 1].cursor !==
+            allLaunches[allLaunches.length - 1].cursor
+          : false
+      };
+    },
+    launch: (_, { id }, { dataSources }) =>
+      dataSources.launchAPI.getLaunchById({ launchId: id }),
+     me: async (_, __, { dataSources }) =>
+      dataSources.userAPI.findOrCreateUser(),
+  }
+};
+```
+
+We can now re-test the server. If it hasn't automatically restarted, simply run `npm start` again
+
+Test with:
+
+```sdl
+query GetLaunches {
+  launches(pageSize: 3) {
+    launches {
+      id
+      mission {
+        name
+      }
+    }
+  }
+}
+```
