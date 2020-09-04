@@ -184,3 +184,159 @@ run `npm start` or `yarn start`. This will launch your server on `localhost:4000
    3. Introspection should be disabled for a production GraphQL server. Apollo disables introspection automatically
 2. To introspect the server's schema, click the Schema button on the right side of the playground
    1. The schema's queries, mutationsm and object type definitions appear
+
+## 2. Connect to data sources
+
+A data source is any database, service, or API that holds the data you use to populate your schema's fields.
+
+Apollo provides a `DataSource` class that we can extend to handle interaction logic for a particular type of data source
+
+### Connect a REST API
+
+To connect a REST API:
+
+- Use the `RESTDataSource` class from the `apollo-datasource-rest` package
+  - This is an extention of `DataSource` that handles fetching data from a REST API
+- `extend` the class to use it and provide the URL of the API you are connecting to
+
+Continuing our example:
+
+```javascript
+// src/datasources/launch.js
+const { RESTDataSource } = require('apollo-datasource-rest');
+
+class LaunchAPI extends RESTDataSource {
+  constructor() {
+    super();
+    this.baseURL = 'https://api.spacexdata.com/v2/';
+  }
+}
+
+module.exports = LaunchAPI;
+
+```
+
+- In the above, we have provided the base URL for SpaceX API and created a data source called `Launch API`
+- The `RESTDataSource` class automatically cahches responses from the resources with no added set up: this is called **partial query caching**
+
+#### Write data-fetching methods
+
+The data source needs methods that allow it to fetch the data that queries will request.
+
+In the example, we will call the method `getAllLaunches`:
+
+```javascript
+async getAllLaunches() {
+  const response = await this.get('launches');
+  return Array.isArray(response)
+    ? response.map(launch => this.launchReducer(launch))
+    : [];
+}
+```
+
+**NOTE** `RESTDataSource` provides helper methods that allows us to use HTTP verbs like `GET` and `POST`
+
+- In the above, `this.get('launches')` sends a `GET` request to the API URL and stores the returned data array in `response`
+- `this.launchReducer` is used to transform each piece of data into the format our schema expects. If there is no data, it returns an empty array
+
+`launchReducer` method needs to be written: the following approach will decouple the structure of the schema from the structure of the different data sources that will populate its fields
+
+Calling back to the structure of `Launch` our method should look like this:
+
+```javascript
+launchReducer(launch) {
+  return {
+    id: launch.flight_number || 0,
+    cursor: `${launch.launch_date_unix}`,
+    site: launch.launch_site && launch.launch_site.site_name,
+    mission: {
+      name: launch.mission_name,
+      missionPatchSmall: launch.links.mission_patch_small,
+      missionPatchLarge: launch.links.mission_patch,
+    },
+    rocket: {
+      id: launch.rocket.rocket_id,
+      name: launch.rocket.rocket_name,
+      type: launch.rocket.rocket_type,
+    },
+  };
+}
+```
+
+Using this reducer will allow `getAllLaunches` to remain concise as `Launch` may change over time
+
+Next, to define the `getLaunchByID` method - previously, the queries we established will allow a client to search for a particular launch by its ID
+
+```javascript
+async getLaunchById({ launchId }) {
+  const response = await this.get('launches', { flight_number: launchId });
+  return this.launchReducer(response[0]);
+}
+
+getLaunchesByIds({ launchIds }) {
+  return Promise.all(
+    launchIds.map(launchId => this.getLaunchById({ launchId })),
+  );
+}
+```
+
+`getLaunchById` takes a launch's flight number and returns the data for that particular launch
+`getLaunchByIds` returns the result of multible calls to `getLaunchById`
+
+### Connect a database
+
+Connecting to an API is usually connecting to a *read only* data source. To have a fully functioning app, we need to have a writable data source, such as SQLite.
+
+Apollo does not have a specific `DataSource` subclass for SQL currently, so we use generic `DataSource` class
+
+#### Building a custom data source
+
+Remember the following important subclasses:
+
+1. `initialize` method - use this method if you want to pass any configuration options to a subclass. For example, `initialize` can be used to access our API's `context`
+2. `this.context` - useful for storing and sharing user information
+3. **Caching** - the generic `DataSource` class does not provide a built-in cache: we can use cache primitives to build our own caching functionality
+
+The following are some methods used in the tutorial example:
+
+- `findOrCreateUser({ email })` - finds or creates a user with a given `email` in the database
+- `bookTrips({ launchIds })` - Takes an object with an array of `launchIds` and books them for the logged in user
+- `cancelTrip({ launchID })` - Takes an object with a `launchId` and cancels that launch for the logged in user
+- `getLaunchIdsByUser()` - Returns all booked trips for the logged in user
+- `isBookedOnLaunch({ launchId })` - Determines whether the logged in user has booked a trip on a particular launch
+
+### Add data sources to Apollo Server
+
+Once your own data sources are built, they need to be added to the Apollo Server.
+
+We need to pass a `dataSources` option to the `ApolloServer` constructor - this is an option that return s an object containing newly instantiated data sources. The `index.js` should look like this:
+
+```javascript
+require('dotenv').config();
+const { ApolloServer } = require('apollo-server');
+const typeDefs = require('./schema');
+const { createStore } = require('./utils');
+
+const LaunchAPI = require('./datasources/launch');
+const UserAPI = require('./datasources/user');
+
+const store = createStore();
+
+const server = new ApolloServer({
+  typeDefs,
+  dataSources: () => ({
+    launchAPI: new LaunchAPI(),
+    userAPI: new UserAPI({ store })
+  })
+});
+
+server.listen().then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`);
+  });
+```
+
+- In the above, we import and call the `createStore` function to set up the SQLite database
+- The `dataSources` function is added to the `ApolloServer` constructor to connect instances of `LaunchAPI` and `UserAPI` to our graph
+- The database is passed to the `UserAPI` constructor
+
+**NOTE** if `this.context` is used in a datasource, it is IMPORTANT to create a *new* instance in the `dataSources` function rather than sharing a single instance. If not, `initialize` might be called during every execution of the code for a particular user, replacing `this.context` with the context of another user
