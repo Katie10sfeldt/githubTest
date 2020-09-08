@@ -639,3 +639,223 @@ query GetLaunches {
   }
 }
 ```
+
+## 4. Write mutation resolvers
+
+Mutation resolvers are very similar to resolvers for query operations:
+
+### `login`
+
+Going from the example, we can start with the `login` mutation by writing a resolver for `Mutation.login`.
+
+In the `resolver.js` file, the resolver should look like this:
+
+```javascript
+// Query: {
+//   ...
+// },
+Mutation: {
+  login: async (_, { email }, { dataSources }) => {
+    const user = await dataSources.userAPI.findOrCreateUser({ email });
+    if (user) return Buffer.from(email).toString('base64');
+  }
+},
+```
+
+- Above, the resolver takes an `email` and returns a login token for the corresponding user. If the user doesn't exist, one is created.
+
+#### Authenticating logged-in users
+
+**NOTE** in the examples, the method for authenticating users is not secure, but the basic principles are that of token-based authentication, which can be applied to a method that is secure.
+
+`Mutation.login` resolver returns a token that clients can use to authenticate themselves to the server. To add logic to the server:
+
+1. import the `isEmail` function and require it
+2. Pass a `context` function to the constructor of ApolloServer that looks like this:
+
+```javascript
+const isEmail = require('isemail');
+
+const server = new ApolloServer({
+
+  context: async ({ req }) => {
+    // simple auth check on every request
+    const auth = req.headers && req.headers.authorization || '';
+    const email = Buffer.from(auth, 'base64').toString('ascii');
+    if (!isEmail.validate(email)) return { user: null };
+    // find a user by their email
+    const users = await store.users.findOrCreate({ where: { email } });
+    const user = users && users[0] || null;
+    return { user: { ...user.dataValues } };
+  },
+  // Additional constructor options
+});
+```
+
+- Above, `context` is called once for every GraphQL operation that clients send to the server. The return value becomes the `context` argument that's passed to every resolver that runs as part of the operation.
+- This `context` function does 3 things:
+  - Obtains the value of the `Authorization` header - if it exists - included in the request
+  - Devodes the value of the `Authorization` header
+  - If the decoded value resembles an email addressm obtain the user details for that email address from the database and return an object that includes those details in the `user` field
+
+By using the `context` function, our resolvers know to access the details for the particular logged in user and perform those actions specifically for that user
+
+**NOTE** Above is where we would include authentication including passwords to increase security
+
+### `bookTrips` and `cancelTrip`
+
+Adding resolvers for `bookTrips` and `cancelTrip` to the `Mutation` object:
+
+```javascript
+//Mutation: {
+  
+  // login: ...
+
+  bookTrips: async (_, { launchIds }, { dataSources }) => {
+    const results = await dataSources.userAPI.bookTrips({ launchIds });
+    const launches = await dataSources.launchAPI.getLaunchesByIds({
+      launchIds,
+    });
+
+    return {
+      success: results && results.length === launchIds.length,
+      message:
+        results.length === launchIds.length
+          ? 'trips booked successfully'
+          : `the following launches couldn't be booked: ${launchIds.filter(
+              id => !results.includes(id),
+            )}`,
+      launches,
+    };
+  },
+  cancelTrip: async (_, { launchId }, { dataSources }) => {
+    const result = await dataSources.userAPI.cancelTrip({ launchId });
+
+    if (!result)
+      return {
+        success: false,
+        message: 'failed to cancel trip',
+      };
+
+    const launch = await dataSources.launchAPI.getLaunchById({ launchId });
+    return {
+      success: true,
+      message: 'trip cancelled',
+      launches: [launch],
+    };
+  },
+```
+
+- Above, the two resolvers return an object that conforms to the structure of the `TripUpdateResponse` type.
+  - This field includes a `success` indicator, a status `message` and an array of `launches` that the mutation will either book or cancel.
+  - **NOTE** The `bookTrips` resolver can account for a partial success where some trips are successfully added and some are not, and then returns the launches that were unsuccessful. It returns this within the `message` field
+
+### Run mutations in the GraphQL Playground
+
+To test the mutations start the GraphQL Playground in the browser
+
+#### Obtain a login token
+
+Mutations are structured like queries, except they use the keyword `mutation`. Our first test looks like:
+
+```javascript
+mutation LoginUser {
+  login(email: "daisy@apollographql.com")
+}
+```
+
+The playground should respond with a long string, something similar to `ZGFpc3lAYXBvbGxvZ3JhcGhxbC5jb20=`
+
+The long string of characters is the login token which is a Base64 encoded verson of the email address provided.
+
+#### Book trips
+
+Because of the way our app is structured, only authenticated users can book trips. In testing, we can copy the provided login token to authenticate ourselves.
+
+This test should look like this:
+
+```javascript
+mutation BookTrips {
+  bookTrips(launchIds: [67, 68, 69]) {
+    success
+    message
+    launches {
+      id
+    }
+  }
+}
+```
+
+and in the HTTP Headers section on the bottom left (using our authentication string):
+
+```json
+{
+  "authorization": "ZGFpc3lAYXBvbGxvZ3JhcGhxbC5jb20="
+}
+```
+
+If everything is working, the playground should return a success message, along with the ids of the launches we booked.
+
+## 5. Connect your graph to Apollo Studio
+
+Apollo Studio - a cloud platform that helps with every phase of GraphQL development from prototyping to deploying and monitoring
+
+### Create an Apollo account
+
+Sign up for an account here: [studio.apollographql.com](https://studio.apollographql.com/)
+
+### Create your first graph
+
+In Apollo Studio, each graph is a distinct data graph with a corresponding GraphQL schema.
+
+1. From the Studio Homepage, click New Graph.
+2. Provide a name for the graph, click Next.
+3. Register the schema (see next step)
+
+### Connect your server
+
+Apollo Server and Apollo Studio can communicate with each other to register the schema and push performance metrics. A graph API key is required for this communication
+
+Within the dialog box, we are provided with our `APOLLO_KEY`, which is a unique identifier for the ApolloServer
+
+**NOTE** The API key should only be explicitly written out in the `.env` file, which is included in the `.gitignore` - the key should never be openly accessible to someone who can view our source code.
+
+- Create a `.env` file and paste in the `APOLLO_KEY=[your unique code here]`
+- In the `ApolloServer`, add the option:
+
+```javascript
+const server = new ApolloServer({
+  // ...other options...
+  engine: {
+    reportSchema: true
+  }
+});
+```
+
+- Save, and start the server. It may take a few moments, but the Apollo Studio will connect and you will be able to click on your graph.
+
+### Try out free Studio features
+
+#### The Explorer Tab
+
+Explorer tab provides a comprehensive view into the schema, including all documentation strings.
+
+Used to build queries and execute them on the server
+
+Within the explorer tab, set it up to connect with the server URL (in this case, localhost:4000)
+
+We can create queries and operations within this section to run tests.
+
+#### Schema History
+
+In the History tab, we can identify exactly when a particular type or field was added or removed - especially helpful when trying to debug
+
+#### Operation metrics
+
+Apollo Server will push metrics data to Studio for each operation it executes.
+
+This will include a breakdown of the timing and error info for each field.
+
+Open the Operations tab.
+
+- The tab will show performance data from the last 24 hours of the server's operation traces (in the free version. For a look at the last 90 days, you must have a paid plan).
