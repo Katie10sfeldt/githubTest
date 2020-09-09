@@ -13,15 +13,15 @@ Create the blueprint for the data graph
 - A schema is only useful if the data graph conforms to the schema's structure
 - Apollo Server contains a core feature that enforces a schema's structure
 
-1. Install the Apollo Server and other dependencies. Copy the following into the command line. This will install 2 packages: `apollo-server` and `graphql`
+- Install the Apollo Server and other dependencies. Copy the following into the command line. This will install 2 packages: `apollo-server` and `graphql`
 
 ```cli
 cd start/server && npm install
 ```
 
-2. Navigate to `src/index.js` to create the server and paste the folliwing into the file:
-   1. This will import the `ApolloServer` class from `apollo-server`, along with the schema from `src/schema.js`
-   2. It creates a new instance of `ApolloServer` and passes the imported schema via the `typeDefs` property
+- Navigate to `src/index.js` to create the server and paste the folliwing into the file:
+  - This will import the `ApolloServer` class from `apollo-server`, along with the schema from `src/schema.js`
+  - It creates a new instance of `ApolloServer` and passes the imported schema via the `typeDefs` property
 
 ```javascript
 const { ApolloServer } = require('apollo-server');
@@ -859,3 +859,447 @@ This will include a breakdown of the timing and error info for each field.
 Open the Operations tab.
 
 - The tab will show performance data from the last 24 hours of the server's operation traces (in the free version. For a look at the last 90 days, you must have a paid plan).
+
+---
+
+## SET UP FRONT END
+
+---
+
+## 6. Set up Apollo Client
+
+Apollo Client:
+
+- Used to create front ends that communicate with the backend.
+- Enables use of Graph QL to manage both local and remote data
+- View-layer agnostic (usable with React, Vue, Angular, or vanilla JS)
+
+### Setup
+
+In this section, we switch directories from the `/server` to the `/client`
+
+When the directories are switched, we need to install the packages listed in the `package.json`. To do this, run either `yarn add` or `npm install`
+
+To link the server and client directories, we need to include the unique API key in both within the `.env` file. Create a new `.env` file within the client directory and paste:
+
+```cli
+APOLLO_KEY=UNIQUE_KEY_HERE
+```
+
+Open the empty file `apollo.config.js` - This file is used to configure the behavior of the Apollo VSCode extension and the Apollo CLI. The following code should be added to that file:
+
+```js
+module.exports = {
+  client: {
+    name: 'Space Explorer [web]',
+    service: 'PASTE_YOUR_GRAPH_NAME_HERE',
+  },
+};
+```
+
+- Above, we would replace the `PASTE_YOUR_GRAPH_NAME_HERE` with the unique name of the graph created in Apollo Studio
+
+### Initialize `ApolloClient`
+
+Within the `index.jsx` file, we get started by including the following:
+
+```jsx
+import { ApolloClient, InMemoryCache } from "@apollo/client";
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000/",
+  cache: new InMemoryCache()
+});
+```
+
+The `ApolloClient` requires two parameters:
+
+- The `uri` where the server is hosted (in local cases, `localhost:4000`)
+- An instance of `InMemoryCache` to use as the client's `cache`
+
+### Make your first query
+
+Before adding React view layers, we want to make sure that queries will work with vanilla JavaScript.
+
+- In the same `index.js` file, add:
+
+```js
+client
+  .query({
+    query: gql`
+      query TestQuery {
+        launch(id: 56) {
+          id
+          mission {
+            name
+          }
+        }
+      }
+    `
+  })
+  .then(result => console.log(result));
+```
+
+- Navigate to the server and start it with `npm start` or `yarn start`
+- Navigate back to the client side, and start it with `npm start` or `yarn start`. This should navigate you to `https://localhost:3000` automatically
+- Open developer tools in the browser - you can see the information that was requested in the query is stored in a logged `Object`, inside the object's `data` field. This can be cross-referenced with the server on `localhost:4000`
+- Delete the `client.query()` call, along with the `gql` (no longer needed, we have verified that the client side is linked to the server)
+
+### Integrate with React
+
+By adding Apollo Client to a React app, we can use Apollo hooks to bind the results of Graph QL directly to the UI
+
+To connect the Apollo Client to React, wrap the app in the `ApolloProvider` component included in the `@apollo/client` package. The component is passed to the `ApolloClient` instance through the `client` prop
+
+We can now begin to render elements and components within the `index.js`:
+
+```jsx
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import React from "react";
+import ReactDOM from "react-dom";
+import Pages from "./pages";
+import injectStyles from "./styles";
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000/",
+  cache: new InMemoryCache()
+});
+
+injectStyles();
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <Pages />
+  </ApolloProvider>,
+  document.getElementById("root")
+);
+```
+
+**NOTE** The `ApolloProvider` component is similar to React's context provider, meaning that it wraps the React app, and places the client on the contet, which allows you to access it from anywhere in the component tree.
+
+## 7. Fetch data with queries
+
+### The `useQuery` hook
+
+The `useQuery` hook is one of the most important building blocks of an Apollo app
+
+- It is a React Hook that fetches a GraphQL query and exposes the results so you can render the UI based on the returned data
+- It leverages React's Hooks API to fetch and load data from queries into the UI
+  - It exposes `error`, `loading` and `data` properties through a result object that help us populate and render the component
+
+### Fetching a list
+
+To create a component with `useQuery`, we have to import it from `@apollo/client`, then pass the query wrapped with `gql` as the first parameter, them wire the component up to use the `loading`, `data` and `error` properties on the result object to render proper UI in the app.
+
+First, we build the query that fetches a list of launches, then import the components we will need later.
+
+In the example, navigate to `src/pages/launches.jsx`, and add this code:
+
+```jsx
+import React, { Fragment } from "react";
+import { gql, useQuery } from "@apollo/client";
+
+import { LaunchTile, Header, Button, Loading } from "../components";
+
+const GET_LAUNCHES = gql`
+  query launchList($after: String) {
+    launches(after: $after) {
+      cursor
+      hasMore
+      launches {
+        id
+        isBooked
+        rocket {
+          id
+          name
+        }
+        mission {
+          name
+          missionPatch
+        }
+      }
+    }
+  }
+`;
+```
+
+- Above, we define a query to fetch a list of launches by calling the `launches` query from the schema. `launches` then returns an object type with a list of launches, in addition to the `cursor` of the paginated list and whether or not the list `hasMore` launches. The query needs to be wrapped with the `gql` function to parse it correctly
+
+Next, we pass the query to the `useQuery` component to render the list:
+
+```jsx
+const Launches = () => {
+  const { data, loading, error } = useQuery(GET_LAUNCHES);
+
+  if (loading) return <Loading />;
+  if (error) return <p>ERROR</p>;
+  if (!data) return <p>Not found</p>;
+
+  return (
+    <Fragment>
+      <Header />
+      {data.launches &&
+        data.launches.launches &&
+        data.launches.launches.map(launch => (
+          <LaunchTile key={launch.id} launch={launch} />
+        ))}
+    </Fragment>
+  );
+};
+
+export default Launches;
+```
+
+- Above, we render the list by passing the `GET_LAUNCHES` query into the `useQuery` hook. Them, depending on the current state of the data, we render either a loading indicator, an error message, or a list of launches.
+- In its current state, the query will only fetch the first 20 launches from the list. To fetch the full list, we need to build a pagination feature that displays a `Load More` button to add more items on to the screen.
+
+#### Build a paginated list
+
+To build a paginated list with Apollo, first we have to destructure the `fetchMore` fuction from the `useQuery` result object:
+
+```jsx
+const Launches = () => {
+  const {
+    data,
+    loading,
+    error,
+
+    fetchMore
+  } = useQuery(GET_LAUNCHES);
+  // same as above
+};
+```
+
+Next, we have to connect it to a button that will fetch more items when it is clicked.
+
+- We need to specify an `updateQuery` function on the return object from `fetchMore` that will tell the cache how to update the query with the NEW items
+  - The following code should be placed before the `</Fragment>` tag in the `Launches` component:
+
+```jsx
+  {data.launches &&
+  data.launches.hasMore && (
+    <Button
+      onClick={() =>
+
+        fetchMore({
+          variables: {
+            after: data.launches.cursor,
+          },
+
+          updateQuery: (prev, { fetchMoreResult, ...rest }) => {
+            if (!fetchMoreResult) return prev;
+            return {
+              ...fetchMoreResult,
+              launches: {
+                ...fetchMoreResult.launches,
+                launches: [
+                  ...prev.launches.launches,
+                  ...fetchMoreResult.launches.launches,
+                ],
+              },
+            };
+          },
+        })
+      }
+    >
+      Load More
+    </Button>
+  )
+}
+```
+
+- Above, we check to see if we have more launches available in the query. If so, we render a button with a cilck handler that calls the function `fetchMore`. `fetchMore` receives new variables for the list of launches query, which is represented by the cursor
+- We define the `updateQuery` to tell Apollo how to update the list of launches in the cache.
+  - This is done by taking the previous query result and combining it with the new result
+
+### Fetching a single launch
+
+Next, in the `launch.jsx`, we use this to build the detail page.
+
+```jsx
+import React, { Fragment } from "react";
+import { gql, useQuery } from "@apollo/client";
+
+import { Loading, Header, LaunchDetail } from "../components";
+import { ActionButton } from "../containers";
+
+export const GET_LAUNCH_DETAILS = gql`
+  query LaunchDetails($launchId: ID!) {
+    launch(id: $launchId) {
+      id
+      site
+      isBooked
+      rocket {
+        id
+        name
+        type
+      }
+      mission {
+        name
+        missionPatch
+      }
+    }
+  }
+`;
+```
+
+```jsx
+const Launch = ({ launchId }) => {
+  const { data, loading, error } = useQuery(GET_LAUNCH_DETAILS, {
+    variables: { launchId }
+  });
+
+  if (loading) return <Loading />;
+  if (error) return <p>ERROR: {error.message}</p>;
+  if (!data) return <p>Not found</p>;
+
+  return (
+    <Fragment>
+      <Header
+        image={
+          data.launch && data.launch.mission && data.launch.mission.missionPatch
+        }
+      >
+        {data && data.launch && data.launch.mission && data.launch.mission.name}
+      </Header>
+      <LaunchDetail {...data.launch} />
+      <ActionButton {...data.launch} />
+    </Fragment>
+  );
+};
+
+export default Launch;
+```
+
+- Above is similar to how we built the `Launches` in basic structure.
+- This time, however, we need to pass `launchID` as a variable to the query, which is done by adding the `variables` option to `useQuery`.
+- The `launchID` comes through as a prop from the router
+
+#### Using fragments to share code
+
+When we have two GraphQL operations that contain the same fields, we can use a fragment to share fields between the two.
+
+In `launches.jsx`, we can write our first fragment (containing the same fields that are used in `launch.jsx`)
+
+```jsx
+export const LAUNCH_TILE_DATA = gql`
+  fragment LaunchTile on Launch {
+    id
+    isBooked
+    rocket {
+      id
+      name
+    }
+    mission {
+      name
+      missionPatch
+    }
+  }
+`;
+```
+
+- Above, we define the fragment by giving it a name (`LaunchTile`) and defining it in our schema (`Launch`)
+
+**NOTE** Fragments can be named anything, but the type must correspond to a type in our schema
+
+To use the fragment in the query, we import it into the GraphQL document and use the spread operator (`...`) to spread the fields into the query:
+
+```jsx
+const GET_LAUNCHES = gql`
+  query launchList($after: String) {
+    launches(after: $after) {
+      cursor
+      hasMore
+      launches {
+
+        ...LaunchTile
+      }
+    }
+  }
+  ${LAUNCH_TILE_DATA}
+`;
+```
+
+We can then use this in `launch.jsx`, but it needs to be imported first:
+
+```jsx
+import { LAUNCH_TILE_DATA } from "./launches";
+
+export const GET_LAUNCH_DETAILS = gql`
+  query LaunchDetails($launchId: ID!) {
+    launch(id: $launchId) {
+      site
+      rocket {
+        type
+      }
+      ...LaunchTile
+    }
+  }
+  ${LAUNCH_TILE_DATA}
+`;
+```
+
+#### Customizing the fetch policy
+
+Sometimes, we may want the Apollo Client to bypass the cache if there is data that needs to constantly be refreshed.
+
+To do this, we have to customize the `useQuery` hook's `fetchPolicy`
+
+In `src/pages/profile.jsx`, write the query:
+
+```jsx
+import React, { Fragment } from "react";
+import { gql, useQuery } from "@apollo/client";
+
+import { Loading, Header, LaunchTile } from "../components";
+import { LAUNCH_TILE_DATA } from "./launches";
+
+export const GET_MY_TRIPS = gql`
+  query GetMyTrips {
+    me {
+      id
+      email
+      trips {
+        ...LaunchTile
+      }
+    }
+  }
+  ${LAUNCH_TILE_DATA}
+`;
+```
+
+Next, we render the component with `useQuery` to fetch a logged in user's list of trips.
+
+- By default Apollo Client will fetch data `cache-first` - meaning it will check the cache to see if the result is already there before it goes to the network for a request.
+- The list should always reflect only the newest data from the API.
+
+To get the list to reflect the newest data, we set the `fetchPolicy` for the query to `network-only`
+
+```jsx
+const Profile = () => {
+  const { data, loading, error } = useQuery(
+    GET_MY_TRIPS,
+
+    { fetchPolicy: "network-only" }
+  );
+  if (loading) return <Loading />;
+  if (error) return <p>ERROR: {error.message}</p>;
+  if (data === undefined) return <p>ERROR</p>;
+
+  return (
+    <Fragment>
+      <Header>My Trips</Header>
+      {data.me && data.me.trips.length ? (
+        data.me.trips.map(launch => (
+          <LaunchTile key={launch.id} launch={launch} />
+        ))
+      ) : (
+        <p>You haven't booked any trips</p>
+      )}
+    </Fragment>
+  );
+};
+
+export default Profile;
+```
+
+- In the above, once the login feature is built, we can fetch a paginated list, share fragments and customize the fetch policy.
