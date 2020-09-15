@@ -1303,3 +1303,569 @@ export default Profile;
 ```
 
 - In the above, once the login feature is built, we can fetch a paginated list, share fragments and customize the fetch policy.
+
+## 8. Update data with mutations
+
+Using Apollo Client, we can update data from a graph API as simply as calling a function. Apollo Client cache is smart enough to automatically update in most cases.
+
+### What is the `useMutation` hook?
+
+`useMutation` hook is a building block for an Apollo app. It works with Hooks API to provide a function to execute GraphQL mutation. It also tracks the states (error, loading and complete) of the mutation.
+
+Updating data with `useMutation` is similar to fetching data with `useQuery` with minor differences:
+
+- The first value in the `useMutation` result tuple is a mutate function (instead of `___` - it actually triggers the mutation when it is called
+- The second value in the tuple is a result object that contains loading and error state and the return value from the mutation.
+
+### Update data with `useMutation`
+
+First, we define the GraphQL mutation
+
+In the `login.jsx` file, we write:
+
+```jsx
+import React from "react";
+import {
+  gql,
+  ApolloClient,
+  useApolloClient,
+  useMutation
+} from "@apollo/client";
+
+import { LoginForm, Loading } from "../components";
+
+export const LOGIN_USER = gql`
+  mutation login($email: String!) {
+    login(email: $email)
+  }
+`;
+```
+
+- As before, we use the `gql` function to wrap the GraphQL mutation so it can be parsed correctly.
+
+Now we bind the mutation to the component by passing it to the `useMutation` hook:
+
+```jsx
+export default function Login() {
+  const [login, { data }] = useMutation(LOGIN_USER);
+  return <LoginForm login={login} />;
+}
+```
+
+- Above the `useMutation` hook returns a mutate function called `login` 
+- The hook also returns the data object that we destructure from the tuple
+- We pass the login function to the `LoginForm` component
+
+If we want to make it so that the login persists between sessions for the best UX, we have to save the login token to `localStorage` using the `onCompleted` handler of `useMutation`
+
+#### Expose Apollo Client with `useApolloClient`
+
+Apollo Client makes sure that the `ApolloClient` is available through React's context.
+
+In some cases, we need to access the `ApolloClient` directly to call a method that isn't included with the `@apollo/client` helper. `useApolloClient` hook can allow us to access the client.
+
+- Call `useApolloClient` to get the currently configured client instance.
+- Pass an `onCompleted` callback to `useMutation` that is called when the mutation is done with its return value
+  - Here, we also call `client.wrriteData` to write local data to the Apollo cache showing the user is logged in. (This is a direct write)
+- Save the login token to `localStorage`
+
+```jsx
+export default function Login() {
+
+  const client = useApolloClient();
+  const [login, { loading, error }] = useMutation(LOGIN_USER, {
+    onCompleted({ login }) {
+
+      localStorage.setItem("token", login);
+      client.writeData({ data: { isLoggedIn: true } });
+    }
+  });
+  if (loading) return <Loading />;
+  if (error) return <p>An error occurred</p>;
+
+
+  return <LoginForm login={login} />;
+}
+```
+
+#### Attach authorization headers to the request
+
+To finish the login feature, attach our token to the GraphQL request headers so the server can authorize the user.
+
+In `index.jsx`, write:
+
+```jsx
+const client = new ApolloClient({
+  cache,
+  link: new HttpLink({
+    headers: { authorization: localStorage.getItem('token') },
+    uri: "http://localhost:4000/graphql",
+  }),
+});
+
+cache.writeData({
+  data: {
+    isLoggedIn: !!localStorage.getItem('token'),
+    cartItems: [],
+  },
+});
+```
+
+- Above, we specify the `headers` option on `HttpLink` which allows us to read the token from `localStorage` and attach it to the request's headers each time a GraphQL operation is made.
+
+## 9. Manage Local State
+
+Managing local data with Apollo Client is similar to managing remote data
+
+- In future projects, local state should be managed in the Apollo cache instead of another management library like Redux (better functionality)
+
+#### Write a local schema
+
+The first step on the client side is writing the local schema.
+
+In `resolvers.jsx` write:
+
+```jsx
+import { gql } from "@apollo/client";
+
+export const typeDefs = gql`
+  extend type Query {
+    isLoggedIn: Boolean!
+    cartItems: [ID!]!
+  }
+
+  extend type Launch {
+    isInCart: Boolean!
+  }
+
+  extend type Mutation {
+    addOrRemoveFromCart(id: ID!): [ID!]!
+  }
+`;
+
+export const resolvers = {};
+```
+
+When building a client schema, extend the types of our server schema and wrap it with the `gqp` function.
+
+- Using the extend keyword allows the combination of both schemas inside developer tooling like Apollo VSCode
+
+We are able to add local fields to server data like `isInCart` local field to the `Launch` type we get back from the graph API by extending types.
+
+### Initialize the store
+
+To make sure that we don't run in to errors, when initializing the sore, we should start the Apollo cache with a default state so the queries don't error out when they execute.
+
+- Queries execute as soon as the component mounts
+- We will need to write initial data to the cache for both `isLoggedIn` and `cartItems`
+
+In `index.jsx` we already added a `cache.writeData` call to prep the cache. In the same file, import `typeDefs` and `resolvers`:
+
+```jsx
+import { resolvers, typeDefs } from "./resolvers";
+
+const client = new ApolloClient({
+  cache,
+  link: new HttpLink({
+    uri: "http://localhost:4000/graphql",
+    headers: {
+      authorization: localStorage.getItem("token")
+    }
+  }),
+
+  typeDefs,
+  resolvers
+});
+
+cache.writeData({
+  data: {
+    isLoggedIn: !!localStorage.getItem("token"),
+    cartItems: []
+  }
+});
+```
+
+### Query local data
+
+Querying local data is siilar to querying remote data from graph API.
+
+- The main difference is that a `@client` directive is added to a local field to tell Apollo Client to pull from the cache.
+
+In `index.jsx`:
+
+```jsx
+import { gql, ApolloProvider, useQuery } from "@apollo/client";
+
+import Pages from "./pages";
+import Login from "./pages/login";
+import injectStyles from "./styles";
+
+const IS_LOGGED_IN = gql`
+
+  query IsUserLoggedIn {
+    isLoggedIn @client
+  }
+`
+;
+function IsLoggedIn() {
+  const { data } = useQuery(IS_LOGGED_IN);
+
+  return data.isLoggedIn ? <Pages /> : <Login />;
+}
+
+injectStyles();
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <IsLoggedIn />
+  </ApolloProvider>,
+  document.getElementById("root")
+);
+```
+
+- Above, we create the `IsUserLoggedIn` local query by adding the `@client` directive to the `isLoggedIn` field
+- We render a component with `useQuery`, pass the local query in,, and based on the response, render either a login screen or the homepage depending if the user is logged in.
+  - Since cache reads ahappen at the same time, we don't have to account for the loading state
+
+In `cart.jsx`:
+
+```jsx
+import React, { Fragment } from "react";
+import { gql, useQuery } from "@apollo/client";
+
+import { Header, Loading } from "../components";
+import { CartItem, BookTrips } from "../containers";
+
+export const GET_CART_ITEMS = gql`
+  query GetCartItems {
+    cartItems @client
+  }
+`;
+```
+
+Then: 
+
+```jsx
+const Cart = () => {
+  const { data, loading, error } = useQuery(GET_CART_ITEMS);
+
+  if (loading) return <Loading />;
+  if (error) return <p>ERROR: {error.message}</p>;
+
+  return (
+    <Fragment>
+      <Header>My Cart</Header>
+      {!data || (!!data && data.cartItems.length === 0) ? (
+        <p data-testid="empty-message">No items in your cart</p>
+      ) : (
+        <Fragment>
+          {!!data &&
+            data.cartItems.map(launchId => (
+              <CartItem key={launchId} launchId={launchId} />
+            ))}
+
+          <BookTrips cartItems={!!data ? data.cartItems : []} />
+        </Fragment>
+      )}
+    </Fragment>
+  );
+};
+
+export default Cart;
+```
+
+- Above, we call `useQuery` and bind it to the `GetCartItems`
+
+**NOTE** Local queries can be mixed with remote queries in a single GraphQL document
+
+#### Adding virtual fields to server data
+
+With Apollo Client, we can add virtual fields to data received from the graph API.
+
+- These fields only exist on the client and are useful for decorating server data with local state.
+
+To add virtual field:
+
+- Extend the type of data you're adding the field to in the client schema:
+
+  - `resolvers.jsx`
+  
+```jsx
+import { gql } from "@apollo/client";
+
+export const schema = gql`
+  extend type Launch {
+    isInCart: Boolean!
+  }
+`;
+```
+
+- Specify a client resolver on the `Launch` type to tell Apollo Client how to resolver the virtual field:
+
+```jsx
+// previous imports
+import { GET_CART_ITEMS } from "./pages/cart";
+
+// type defs and other previous variable declarations
+
+export const resolvers = {
+
+  Launch: {
+    isInCart: (launch, _, { cache }) => {
+      const queryResult = cache.readQuery({
+        query: GET_CART_ITEMS
+      });
+
+      if (queryResult) {
+        return queryResult.cartItems.includes(launch.id);
+      }
+      return false;
+    }
+  }
+};
+```
+
+**NOTE** The resolver API on the client is the same as the resolver API on the server
+
+TO query the virtual field on the launch detail page, we add the virtual field to a query and specify the `@client` directive:
+
+```jsx
+export const GET_LAUNCH_DETAILS = gql`
+  query LaunchDetails($launchId: ID!) {
+    launch(id: $launchId) {
+
+      isInCart @client
+      site
+      rocket {
+        type
+      }
+      ...LaunchTile
+    }
+  }
+  ${LAUNCH_TILE_DATA}
+`;
+```
+
+### Update local data
+
+Apollo Client allows us to update local data in the cache with either direct cache writes or client resolvers
+
+- Direct writes are typically used to write sample booleans or strings to the cache
+- Client resolvers are far more complicated writes such as adding or removing data from a list
+
+#### Direct cache writes
+
+We perform a direct write by calling `client.writeData()` and passing in an object with a data property that corresponds to the data we want to write to the cache. 
+
+In `logout-button.jsx`
+
+```jsx
+import React from "react";
+import styled from "react-emotion";
+import { useApolloClient } from "@apollo/client";
+
+import { menuItemClassName } from "../components/menu-item";
+import { ReactComponent as ExitIcon } from "../assets/icons/exit.svg";
+
+export default function LogoutButton() {
+  const client = useApolloClient();
+  return (
+    <StyledButton
+      onClick={() => {
+        client.writeData({ data: { isLoggedIn: false } });
+        localStorage.clear();
+      }}
+    >
+      <ExitIcon />
+      Logout
+    </StyledButton>
+  );
+}
+
+const StyledButton = styled("button")(menuItemClassName, {
+  background: "none",
+  border: "none",
+  padding: 0
+});
+```
+
+- Above, when the button is clicked, we perform a direct cache write by calling `client.writeData` and passing in data object that sets the `isLoggedIn` boolean to false.
+
+In `book-trips.jsx`:
+
+```jsx
+import React from 'react'; // preserve-line
+import { gql, useMutation } from '@apollo/client'; // preserve-line
+
+import Button from '../components/button'; // preserve-line
+import { GET_LAUNCH } from './cart-item'; // preserve-line
+import * as GetCartItemsTypes from '../pages/__generated__/GetCartItems';
+import * as BookTripsTypes from './__generated__/BookTrips';
+
+export const BOOK_TRIPS = gql`
+  mutation BookTrips($launchIds: [ID]!) {
+    bookTrips(launchIds: $launchIds) {
+      success
+      message
+      launches {
+        id
+        isBooked
+      }
+    }
+  }
+`;
+
+interface BookTripsProps extends GetCartItemsTypes.GetCartItems {}
+
+const BookTrips: React.FC<BookTripsProps> = ({ cartItems }) => {
+  const [
+    bookTrips, { data }
+  ] = useMutation<
+    BookTripsTypes.BookTrips,
+    BookTripsTypes.BookTripsVariables
+  > (
+    BOOK_TRIPS,
+    {
+      variables: { launchIds: cartItems },
+      refetchQueries: cartItems.map(launchId => ({
+        query: GET_LAUNCH,
+        variables: { launchId },
+      })),
+
+      update(cache) {
+        cache.writeData({ data: { cartItems: [] } });
+      }
+    }
+  );
+
+  return data && data.bookTrips && !data.bookTrips.success
+    ? <p data-testid="message">{data.bookTrips.message}</p>
+    : (
+      <Button
+        onClick={() => bookTrips()}
+        data-testid="book-button">
+        Book All
+      </Button>
+    );
+}
+
+export default BookTrips;
+```
+
+- Above, we performed a direct write within the update function of the `useMutation` hook. The `update` function lets us manually update the cache after a mutation occurs without refetching data.
+- We directly called `cache.writeData` to reset the state of the `cartItems` after the `BookTrips` mutation is sent to the server.
+
+#### Local resolvers
+
+Local resolvers are useful if we want to perform a more complicated local update like adding or removing items from a list.
+
+They have the same function signature as remote resolvers (`(parent, args, context, info) => data`).
+The only difference is that the Apollo cache is already added to the context . 
+
+Within `resolvers.jsx`, we write the local resolver for `addOrRemoveFromCart` mutation. Under the `Launch` resolver:
+
+```jsx
+export const resolvers = {
+  Mutation: {
+    addOrRemoveFromCart: (_, { id }, { cache }) => {
+      const queryResult = cache.readQuery({
+        query: GET_CART_ITEMS
+      });
+
+      if (queryResult) {
+        const { cartItems } = queryResult;
+        const data = {
+          cartItems: cartItems.includes(id)
+            ? cartItems.filter(i => i !== id)
+            : [...cartItems, id]
+        };
+
+        cache.writeQuery({ query: GET_CART_ITEMS, data });
+        return data.cartItems;
+      }
+      return [];
+    }
+  }
+};
+```
+
+- Above, we destructure the Apollo `cache` from the context to read the query that fetches cart items.
+- When we receive the cart data, we either remove or add the cart item's `id` passed into the mutation to the list.
+- We return the updated list from the mutation.
+
+To call `addOrRemoveFromCart` mutation in a component (within `action-button.jsx`):
+
+```jsx
+import { gql } from "@apollo/client";
+
+const TOGGLE_CART = gql`
+  mutation addOrRemoveFromCart($launchId: ID!) {
+    addOrRemoveFromCart(id: $launchId) @client
+  }
+`;
+```
+
+Like in other cases, the only thing that we need to add to the mutation is the `@client` directive to tell Apollo to resolve the mutation from the cache instead of the remote server.
+
+We can now build out the rest of the `ActionButton` component:
+
+```jsx
+import React from "react";
+import { gql, useMutation } from "@apollo/client";
+
+import { GET_LAUNCH_DETAILS } from "../pages/launch";
+import Button from "../components/button";
+
+export const TOGGLE_CART = gql`
+  mutation addOrRemoveFromCart($launchId: ID!) {
+    addOrRemoveFromCart(id: $launchId) @client
+  }
+`;
+
+export const CANCEL_TRIP = gql`
+  mutation cancel($launchId: ID!) {
+    cancelTrip(launchId: $launchId) {
+      success
+      message
+      launches {
+        id
+        isBooked
+      }
+    }
+  }
+`;
+
+const ActionButton = ({ isBooked, id, isInCart }) => {
+  const [mutate, { loading, error }] = useMutation(
+    isBooked ? CANCEL_TRIP : TOGGLE_CART,
+    {
+      variables: { launchId: id },
+      refetchQueries: [
+        {
+          query: GET_LAUNCH_DETAILS,
+          variables: { launchId: id }
+        }
+      ]
+    }
+  );
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>An error occurred</p>;
+
+  return (
+    <div>
+      <Button onClick={() => mutate()} data-testid={"action-button"}>
+        {isBooked
+          ? "Cancel This Trip"
+          : isInCart
+          ? "Remove from Cart"
+          : "Add to Cart"}
+      </Button>
+    </div>
+  );
+};
+
+export default ActionButton;
+```
+
+- Above, we use the `isBooked` prop passed into the component to determine which mutation we should fire.
+- We can pass in the local mutations to the same `useMutation` hook, like in remote mutations.
